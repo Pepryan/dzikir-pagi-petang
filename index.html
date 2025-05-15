@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Aplikasi dzikir pagi dan petang untuk memudahkan umat Muslim dalam mengamalkan dzikir sesuai sunnah" />
+    <meta name="theme-color" content="#0ea5e9" />
+    <link rel="icon" type="image/svg+xml" href="/dzikir-pagi-petang/moon.svg" />
+    <link rel="manifest" href="/dzikir-pagi-petang/manifest.json" />
+    <link rel="apple-touch-icon" href="/dzikir-pagi-petang/icons/icon-192x192.png" />
+    <title>Daily Dzikr - Dzikir Pagi & Petang</title>
+
+    <!-- Apply theme immediately to prevent flash of wrong theme -->
+    <script>
+      (function() {
+        try {
+          // First, remove any existing theme class to start fresh
+          document.documentElement.classList.remove('dark');
+
+          // Try to get theme from localStorage
+          var savedSettings = localStorage.getItem('dzikirSettings');
+          console.log('Theme script - saved settings:', savedSettings);
+
+          if (savedSettings) {
+            var parsedSettings = JSON.parse(savedSettings);
+            console.log('Theme script - parsed settings:', parsedSettings);
+
+            if (parsedSettings && parsedSettings.theme === 'dark') {
+              console.log('Theme script - applying dark theme from localStorage');
+              document.documentElement.classList.add('dark');
+            } else {
+              console.log('Theme script - applying light theme from localStorage');
+              // Light theme is default (no class needed)
+            }
+          } else {
+            // No saved settings, check system preference
+            console.log('Theme script - no saved settings, checking system preference');
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              console.log('Theme script - applying dark theme from system preference');
+              document.documentElement.classList.add('dark');
+            } else {
+              console.log('Theme script - applying light theme from system preference');
+              // Light theme is default (no class needed)
+            }
+          }
+
+          // Store the applied theme in a global variable for debugging
+          window.__INITIAL_THEME__ = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+          console.log('Theme script - final theme applied:', window.__INITIAL_THEME__);
+        } catch (e) {
+          console.error('Error in theme script:', e);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
