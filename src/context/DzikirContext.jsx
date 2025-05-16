@@ -68,6 +68,7 @@ export const DzikirProvider = ({ children }) => {
       showSource: true,
       autoNext: false,
       showSwipeIndicator: true,
+      arabicFont: 'Noto Naskh Arabic',
       version: '2.0.0'
     };
   };

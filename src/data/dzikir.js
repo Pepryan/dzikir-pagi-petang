@@ -16,7 +16,7 @@ const dzikirData = {
             arabic: "اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ، لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ، لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ، مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ، يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ، وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلاَّ بِمَا شَاءَ، وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ، وَلَا يَئُودُهُ حِفْظُهُمَا، وَهُوَ الْعَلِيُّ الْعَظِيمُ",
             latin: "Allahu laa ilaaha illaa huwal hayyul qayyuum. Laa ta'khudzuhuu sinatuw walaa naum. Lahuu maa fissamaawaati wa maa fil ardh. Man dzal ladzii yasyfa'u 'indahuu illaa bi idznih. Ya'lamu maa baina aidiihim wa maa khalfahum. Wa laa yuhiithuuna bisyai'im min 'ilmihii illaa bimaa syaa'. Wasi'a kursiyyuhus samaawaati wal ardh. Wa laa ya'uuduhuu hifzhuhumaa wahuwal 'aliyyul 'azhiim.",
             translation: "Allah, tidak ada Tuhan (yang berhak disembah) melainkan Dia Yang Hidup kekal lagi terus menerus mengurus (makhluk-Nya); tidak mengantuk dan tidak tidur. Kepunyaan-Nya apa yang di langit dan di bumi. Tiada yang dapat memberi syafa'at di sisi Allah tanpa izin-Nya. Allah mengetahui apa-apa yang di hadapan mereka dan di belakang mereka, dan mereka tidak mengetahui apa-apa dari ilmu Allah melainkan apa yang dikehendaki-Nya. Kursi Allah meliputi langit dan bumi. Dan Allah tidak merasa berat memelihara keduanya, dan Allah Maha Tinggi lagi Maha Besar.",
-            source: "Barangsiapa membaca ayat ini di pagi hari, maka ia akan dijaga dari gangguan jin hingga sore hari. (HR. An-Nasa'i dan Ath-Thabrani)",
+            source: "Nabi صلىهللاعليهوسلم bersabda: \"Barangsiapa yang membaca ayat ini [Ayat Kursi] ketika pagi hari, maka ia dijaga dari (gangguan) jin hingga sore hari. Dan barangsiapa mengucapkannya ketika sore hari, maka ia dijaga dari (gangguan) jin hingga pagi hari.\" (HR. Al-Hakim 1/562, Shahiih at-Targhiib wat Tarhiib 1/418 no. 662, shahih).",
             count: 1,
             counter: 0
         },
@@ -79,6 +79,14 @@ const dzikirData = {
             source: "Dibaca di pagi hari. (HR. Tirmidzi dari Abu Hurairah)",
             count: 1,
             counter: 0
+        },
+        {
+            id: 9,
+            title: "Dzikir Petang #1",
+            arabic: "اَللَّهُمَّ عَافِنِيْ فِيْ بَدَنِيْ، اَللَّهُمَّ عَافِنِيْ فِيْ سَمْعِيْ، اَللَّهُمَّ عَافِنِيْ فِيْ بَصَرِيْ، لاَ إِلَـهَ إِلاَّ أَنْتَ. اَللَّهُمَّ إِنِّي أَعُوْذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ، وَأَعُوْذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لاَ إِلَـهَ إِلاَّ أَنْتَ",
+            latin: "",
+            translation: "Ya Allah, selamatkanlah tubuhku (dari penyakit dan dari apa yang tidak aku inginkan). Ya Allah, selamatkanlah pendengaranku (dari penyakit dan maksiat atau dari apa yang tidak aku inginkan). Ya Allah, selamatkanlah penglihatanku, tidak ada Ilah yang berhak diibadahi dengan benar kecuali Engkau. Ya Allah, sesungguhnya aku berlindung kepada-Mu dari kekufuran dan kefakiran. Aku berlindung kepada-Mu dari siksa kubur, tidak ada Ilah yang berhak diibadahi dengan benar kecuali Engkau.",
+            source: "HR. Al-Bukhari dalam Shahiib al-Adabil Mufrad no. 701, Abu Dawud no. 5090, Ahmad V/42, hasan. Lihat Shahiih Al-Adabil Mufrad no.539",
         }
     ],
     petang: [

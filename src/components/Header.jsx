@@ -9,16 +9,16 @@ const Header = ({ openSettings }) => {
   const { currentTab, switchTab, toggleTheme, settings, resetProgress } = useDzikir();
 
   return (
-    <header className="relative bg-background shadow-md z-10">
+    <header className="relative bg-gray-100 dark:bg-sky-700/10 shadow-md z-10">
       {/* Header with improved spacing */}
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <motion.h1
-          className="text-2xl font-bold text-primary dark:text-primary flex items-center"
+          className="text-2xl font-bold text-gray-800 dark:text-white flex items-center"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <FontAwesomeIcon icon={faMosque} className="mr-2" />
+          <FontAwesomeIcon icon={faMosque} className="mr-2 text-gray-800 dark:text-white" />
           <span>Daily Dzikr</span>
         </motion.h1>
 
@@ -33,7 +33,7 @@ const Header = ({ openSettings }) => {
             {settings.theme === 'dark' ? (
               <FontAwesomeIcon icon={faSun} className="text-yellow-400" />
             ) : (
-              <FontAwesomeIcon icon={faMoon} className="text-primary" />
+              <FontAwesomeIcon icon={faMoon} className="text-gray-800 dark:text-white" />
             )}
           </Button>
 
@@ -44,7 +44,7 @@ const Header = ({ openSettings }) => {
             title="Reset Progress"
             className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
           >
-            <FontAwesomeIcon icon={faRotate} className="text-primary dark:text-primary" />
+            <FontAwesomeIcon icon={faRotate} className="text-gray-800 dark:text-white" />
           </Button>
 
           <Button
@@ -54,7 +54,7 @@ const Header = ({ openSettings }) => {
             title="Pengaturan"
             className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
           >
-            <FontAwesomeIcon icon={faCog} className="text-primary dark:text-primary" />
+            <FontAwesomeIcon icon={faCog} className="text-gray-800 dark:text-white" />
           </Button>
         </div>
       </div>
@@ -67,13 +67,13 @@ const Header = ({ openSettings }) => {
           onValueChange={switchTab}
           className="w-full max-w-md mx-auto"
         >
-          <TabsList className="w-full grid grid-cols-2 bg-gray-100 dark:bg-gray-900/80 p-1.5 rounded-2xl shadow-inner border border-gray-200 dark:border-gray-700 dark:shadow-lg">
+          <TabsList className="w-full grid grid-cols-2 bg-gray-200 dark:bg-sky-700/10 p-1.5 rounded-2xl shadow-inner border border-gray-300 dark:border-sky-700/30 dark:shadow-lg">
             <TabsTrigger
               value="pagi"
               className="font-medium text-sm py-2.5 rounded-xl transition-all duration-300
-                data-[state=active]:bg-white dark:data-[state=active]:bg-primary
-                data-[state=active]:text-primary dark:data-[state=active]:text-black
-                data-[state=active]:shadow-md dark:data-[state=active]:shadow-lg dark:data-[state=active]:shadow-primary/30
+                data-[state=active]:bg-white dark:data-[state=active]:bg-sky-600
+                data-[state=active]:text-gray-800 dark:data-[state=active]:text-white
+                data-[state=active]:shadow-md dark:data-[state=active]:shadow-lg dark:data-[state=active]:shadow-sky-600/30
                 data-[state=active]:font-semibold data-[state=active]:border-0
                 data-[state=inactive]:text-gray-600 dark:data-[state=inactive]:text-gray-300
                 data-[state=inactive]:hover:bg-gray-200/70 dark:data-[state=inactive]:hover:bg-gray-800/70
@@ -92,9 +92,9 @@ const Header = ({ openSettings }) => {
             <TabsTrigger
               value="petang"
               className="font-medium text-sm py-2.5 rounded-xl transition-all duration-300
-                data-[state=active]:bg-white dark:data-[state=active]:bg-primary
-                data-[state=active]:text-primary dark:data-[state=active]:text-black
-                data-[state=active]:shadow-md dark:data-[state=active]:shadow-lg dark:data-[state=active]:shadow-primary/30
+                data-[state=active]:bg-white dark:data-[state=active]:bg-sky-600
+                data-[state=active]:text-gray-800 dark:data-[state=active]:text-white
+                data-[state=active]:shadow-md dark:data-[state=active]:shadow-lg dark:data-[state=active]:shadow-sky-600/30
                 data-[state=active]:font-semibold data-[state=active]:border-0
                 data-[state=inactive]:text-gray-600 dark:data-[state=inactive]:text-gray-300
                 data-[state=inactive]:hover:bg-gray-200/70 dark:data-[state=inactive]:hover:bg-gray-800/70

@@ -10,20 +10,36 @@ function App() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  // Load Arabic font
+  // Load Arabic fonts
   useEffect(() => {
-    // Create a link element for the Arabic font
-    const fontLink = document.createElement('link');
-    fontLink.rel = 'stylesheet';
-    fontLink.href = 'https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap';
-    document.head.appendChild(fontLink);
+    // Create link elements for the Arabic fonts
+    const fontLinks = [
+      'https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap',
+      'https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap',
+      'https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap',
+      'https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;700&display=swap',
+      'https://fonts.googleapis.com/css2?family=Lateef:wght@400;700&display=swap',
+      'https://fonts.googleapis.com/css2?family=Harmattan:wght@400;700&display=swap'
+    ].map(href => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      return link;
+    });
 
-    // Set fonts as loaded
-    fontLink.onload = () => setFontsLoaded(true);
+    // Add all font links to head
+    fontLinks.forEach(link => document.head.appendChild(link));
+
+    // Set fonts as loaded when all fonts are loaded
+    Promise.all(fontLinks.map(link => {
+      return new Promise((resolve) => {
+        link.onload = resolve;
+      });
+    })).then(() => setFontsLoaded(true));
 
     // Cleanup
     return () => {
-      document.head.removeChild(fontLink);
+      fontLinks.forEach(link => document.head.removeChild(link));
     };
   }, []);
 
