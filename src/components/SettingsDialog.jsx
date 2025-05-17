@@ -24,18 +24,18 @@ const SettingsDialog = ({ open, onOpenChange, openAbout }) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md sm:h-auto max-h-screen sm:max-h-none overflow-y-auto" aria-describedby="settings-description">
+      <DialogContent className="sm:max-w-[800px] sm:h-auto max-h-screen sm:max-h-none overflow-y-auto" aria-describedby="settings-description">
         <DialogHeader>
           <DialogTitle>Pengaturan</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6 py-4">
-          <div className="space-y-4">
+        <div className="space-y-4 py-2">
+          <div className="space-y-2">
             <h3 className="font-medium text-lg">Tampilan</h3>
 
-            <div className="mb-4">
-              <h4 className="text-sm font-medium mb-2">Tema</h4>
-              <div className="grid grid-cols-2 gap-4">
+            <div className="mb-2">
+              <h4 className="text-sm font-medium mb-1.5">Tema</h4>
+              <div className="grid grid-cols-2 gap-2">
                 <div className="flex items-center space-x-2">
                   <input
                     type="radio"
@@ -113,7 +113,7 @@ const SettingsDialog = ({ open, onOpenChange, openAbout }) => {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             <h3 className="font-medium text-lg">Metode Penghitung</h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -149,11 +149,11 @@ const SettingsDialog = ({ open, onOpenChange, openAbout }) => {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             <h3 className="font-medium text-lg">Font Arabic</h3>
-            <div className="space-y-4">
+            <div className="space-y-2">
               <div>
-                <label htmlFor="font-size" className="text-sm font-medium mb-2 block">Ukuran Font</label>
+                <label htmlFor="font-size" className="text-sm font-medium mb-1.5 block">Ukuran Font</label>
                 <div className="flex items-center space-x-4">
                   <input
                     type="range"
@@ -168,7 +168,7 @@ const SettingsDialog = ({ open, onOpenChange, openAbout }) => {
                   <span className="text-sm font-medium w-12 text-center">{settings.arabicFontSize}px</span>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-6">
               <div className="flex items-center space-x-2">
                 <input
                   type="radio"
@@ -261,7 +261,7 @@ const SettingsDialog = ({ open, onOpenChange, openAbout }) => {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             <h3 className="font-medium text-lg">Navigasi</h3>
 
             <div className="flex items-center justify-between">
@@ -278,7 +278,7 @@ const SettingsDialog = ({ open, onOpenChange, openAbout }) => {
           </div>
         </div>
 
-        <DialogFooter className="flex-col space-y-4 sm:space-y-0 sm:flex-row">
+        <DialogFooter className="flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-2">
           {/* Reset Settings Button */}
           <Button
             variant="outline"
