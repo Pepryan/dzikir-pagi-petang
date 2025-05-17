@@ -1,69 +1,149 @@
-# Dzikir Pagi Petang
+<div align="center">
 
-A modern, responsive web application for morning and evening Islamic remembrance (dzikir) with a clean, user-friendly interface.
+# 📿 Dzikir Pagi Petang
 
-## Features
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-- **Modern UI/UX**: Built with Tailwind CSS and shadcn/ui components for a sleek, responsive design
-- **Swipe Navigation**: Mobile-friendly swipe gestures for easy navigation between dzikir cards
-- **Progress Tracking**: Visual progress bar and navigation indicators
-- **Dark Mode**: Full support for light and dark themes
-- **Persistent State**: Automatically saves progress and preferences
-- **Responsive Design**: Optimized for all device sizes
+Aplikasi web modern untuk dzikir pagi dan petang dengan antarmuka yang bersih dan ramah pengguna.
 
-## Live Demo
+[🌐 Lihat Demo](https://pepryan.github.io/dzikir-pagi-petang) | [🐛 Laporkan Bug](https://github.com/pepryan/dzikir-pagi-petang/issues) | [✨ Ajukan Fitur](https://github.com/pepryan/dzikir-pagi-petang/issues)
 
-Visit the application at: [https://yourusername.github.io/dzikir-pagi-petang](https://yourusername.github.io/dzikir-pagi-petang)
+</div>
 
-## Technologies Used
+## ✨ Fitur Utama
 
-- [React](https://reactjs.org/)
-- [Vite](https://vitejs.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [Swiper](https://swiperjs.com/)
-- [Framer Motion](https://www.framer.com/motion/)
+- 🎨 **Antarmuka Modern**: 
+  - Dibangun dengan Tailwind CSS dan komponen shadcn/ui
+  - Desain responsif yang elegan dan intuitif
+  - Tema terang dan gelap yang dapat disesuaikan
 
-## Installation
+- 📱 **Optimasi Mobile**: 
+  - Navigasi dengan gesture geser (swipe)
+  - Tampilan yang responsif untuk semua ukuran layar
+  - Pengalaman pengguna yang mulus di perangkat mobile
 
-1. Clone the repository:
+- 🔄 **Fitur Pelacakan**: 
+  - Progress bar visual untuk memantau kemajuan
+  - Indikator navigasi yang intuitif
+  - Penyimpanan progres otomatis
+
+- 💾 **Penyimpanan Data**: 
+  - Menyimpan kemajuan dzikir secara otomatis
+  - Pengaturan preferensi pengguna yang persisten
+  - Data tersimpan di penyimpanan lokal browser
+
+## 🛠️ Teknologi
+
+- **Frontend Framework**: [React](https://reactjs.org/) dengan [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool**: [Vite](https://vitejs.dev/) untuk pengembangan yang cepat
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) untuk desain yang fleksibel
+- **Komponen UI**: [shadcn/ui](https://ui.shadcn.com/) untuk komponen yang konsisten
+- **Animasi**: [Framer Motion](https://www.framer.com/motion/) untuk transisi halus
+- **Navigasi**: [Swiper](https://swiperjs.com/) untuk gesture swipe
+
+## 🚀 Memulai
+
+### Prasyarat
+
+- Node.js (versi 16 atau lebih baru)
+- npm atau yarn
+
+### Instalasi
+
+1. Clone repositori:
    ```bash
    git clone https://github.com/yourusername/dzikir-pagi-petang.git
    cd dzikir-pagi-petang
    ```
 
-2. Install dependencies:
+2. Install dependensi:
    ```bash
    npm install
+   # atau
+   yarn install
    ```
 
-3. Start the development server:
+3. Jalankan server pengembangan:
    ```bash
    npm run dev
+   # atau
+   yarn dev
    ```
+   Server akan berjalan dengan fitur Hot Module Replacement (HMR) yang memungkinkan pembaruan instan saat kode diubah.
 
-4. Build for production:
+4. Buka browser dan akses `http://localhost:5173/dzikir-pagi-petang/`
+
+### Fitur Development
+
+- 🔥 **Hot Module Replacement (HMR)**: Pembaruan instan tanpa refresh browser
+- 📦 **Code Splitting**: Optimasi chunk untuk vendor dan komponen utama
+- 🔍 **Path Alias**: Menggunakan `@/` untuk import dari direktori `src`
+- 🛠️ **Build Optimization**: Konfigurasi khusus untuk performa optimal
+
+## 📦 Build dan Deployment
+
+Aplikasi ini dikonfigurasi khusus untuk deployment di GitHub Pages dengan base URL yang sesuai:
+
+1. Build proyek:
    ```bash
    npm run build
+   # atau
+   yarn build
+   ```
+   Proses build akan menghasilkan output teroptimasi dengan:
+   - Code splitting otomatis
+   - Minifikasi dan kompresi aset
+   - Pembagian chunk vendor terpisah
+   - Optimasi gambar dan aset statis
+
+2. Preview hasil build (opsional):
+   ```bash
+   npm run preview
+   # atau
+   yarn preview
    ```
 
-## Deployment
+3. Deploy ke GitHub Pages:
+   ```bash
+   npm run deploy
+   # atau
+   yarn deploy
+   ```
+   
+Konfigurasi Vite telah dioptimalkan untuk deployment di GitHub Pages dengan base URL `/dzikir-pagi-petang/`.
 
-This project is configured for GitHub Pages deployment. After building, the output will be in the `dist` folder, which can be deployed to GitHub Pages.
+## 🤝 Kontribusi
 
-```bash
-# Build the project
-npm run build
+Kami sangat menghargai kontribusi Anda! Berikut cara untuk berkontribusi:
 
-# Deploy to GitHub Pages (if you have gh-pages installed)
-npm run deploy
-```
+1. Fork repositori ini
+2. Buat branch fitur (`git checkout -b fitur/AmazingFeature`)
+3. Commit perubahan (`git commit -m 'Menambahkan fitur baru'`)
+4. Push ke branch (`git push origin fitur/AmazingFeature`)
+5. Buat Pull Request
 
-## Contributing
+### Panduan Kontribusi
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+- Pastikan kode mengikuti standar format yang ada
+- Tambahkan komentar untuk kode yang kompleks
+- Update dokumentasi jika diperlukan
+- Pastikan semua test berjalan dengan baik
 
-## License
+## 📝 Lisensi
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Proyek ini dilisensikan di bawah Lisensi MIT - lihat file [LICENSE](LICENSE) untuk detail.
+
+## 🙏 Penghargaan
+
+- Inspirasi UI/UX dari berbagai aplikasi dzikir modern
+- Sumber konten dzikir dari literatur Islam yang terpercaya
+
+---
+
+<div align="center">
+
+Dibuat dengan ❤️ oleh Febryan Ramadhan untuk Umat Muslim
+
+</div>
