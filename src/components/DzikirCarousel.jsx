@@ -220,70 +220,39 @@ const DzikirCarousel = () => {
             </motion.button>
           ) : (
             <div className="flex space-x-4">
+              {/* Minus button */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.9 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleDecrementClick}
+                className="w-12 h-12 flex items-center justify-center rounded-full bg-white/90 dark:bg-gray-800/90 shadow-lg backdrop-blur-sm text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
                 disabled={!currentDzikir || currentDzikir.counter <= 0}
-                className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center ${
-                  !currentDzikir || currentDzikir.counter <= 0
-                    ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                    : 'bg-neutral-800 dark:bg-sky-800 text-white'
-                }`}
               >
-                <FontAwesomeIcon icon={faMinus} className="text-lg" />
+                <FontAwesomeIcon icon={faMinus} />
               </motion.button>
 
-              <div className="flex flex-col items-center justify-center">
-                <span className="text-sm font-medium mb-1 text-gray-600 dark:text-sky-200">
-                  {currentDzikir ? `${currentDzikir.counter}/${currentDzikir.count}` : '0/0'}
-                </span>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={handleIncrementClick}
-                  disabled={!currentDzikir || currentDzikir.counter >= currentDzikir.count}
-                  className={`w-16 h-16 rounded-full shadow-lg flex items-center justify-center ${
-                    isComplete
-                      ? 'bg-green-500 dark:bg-green-500 text-white'
-                      : !currentDzikir || currentDzikir.counter >= currentDzikir.count
-                        ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                        : 'bg-neutral-800 dark:bg-sky-600 text-white'
-                  }`}
-                >
-                  {isComplete ? (
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-xl" />
-                  ) : (
-                    <FontAwesomeIcon icon={faPlus} className="text-xl" />
-                  )}
-                </motion.button>
-              </div>
-
+              {/* Check button */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => {
-                  if (!currentDzikir || isComplete) return;
-
-                  updateCounter(currentDzikirIndex, currentDzikir.count);
-
-                  // Auto-navigate to next dzikir if setting is enabled
-                  if (settings.autoNext && currentDzikirIndex < dzikirList.length - 1) {
-                    setTimeout(() => {
-                      if (swiper) {
-                        swiper.slideNext();
-                      }
-                    }, 500);
-                  }
-                }}
-                disabled={!currentDzikir || isComplete}
-                className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center ${
-                  !currentDzikir || isComplete
-                    ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
-                    : 'bg-neutral-800 dark:bg-sky-800 text-white'
-                }`}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleMarkClick}
+                className={`w-12 h-12 flex items-center justify-center rounded-full shadow-lg backdrop-blur-sm ${isComplete
+                  ? 'bg-green-500/90 dark:bg-green-600/90 text-white border-green-400 dark:border-green-500'
+                  : 'bg-white/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700'
+                  } border`}
               >
-                <FontAwesomeIcon icon={faCircleCheck} className="text-lg" />
+                <FontAwesomeIcon icon={isComplete ? faCircleCheck : faCheck} />
+              </motion.button>
+
+              {/* Plus button */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleIncrementClick}
+                className="w-12 h-12 flex items-center justify-center rounded-full bg-white/90 dark:bg-gray-800/90 shadow-lg backdrop-blur-sm text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
+                disabled={!currentDzikir || currentDzikir.counter >= currentDzikir.count}
+              >
+                <FontAwesomeIcon icon={faPlus} />
               </motion.button>
             </div>
           )}
