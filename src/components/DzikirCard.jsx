@@ -89,7 +89,7 @@ const DzikirCard = ({ dzikir }) => {
               ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
               : 'bg-primary-100 text-primary-800 dark:bg-gray-800 dark:text-primary'
           }`}>
-            <span className="text-gray-600 dark:text-gray-400 mr-1">Target:</span>
+            <span className="text-gray-600 dark:text-gray-400 mr-1">Dibaca:</span>
             {dzikir.counter}/{dzikir.count}
           </span>
         </CardTitle>

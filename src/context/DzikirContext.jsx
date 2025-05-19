@@ -159,59 +159,42 @@ export const DzikirProvider = ({ children }) => {
   const [settings, setSettings] = useState(getInitialSettings());
   const [data, setData] = useState(getInitialData());
 
-  // We've moved the data validation logic to the getInitialData function
-
   // Periodically save all data as a backup
   useEffect(() => {
-    // Save all data every 30 seconds as a backup
     const saveInterval = setInterval(() => {
       if (isLocalStorageAvailable()) {
         try {
-          // Save all data in one go
           localStorage.setItem('dzikirSettings', JSON.stringify(settings));
           localStorage.setItem('dzikirProgress', JSON.stringify(data));
           localStorage.setItem('dzikirCurrentTab', currentTab);
           localStorage.setItem('dzikirCurrentIndex', currentDzikirIndex.toString());
-
         } catch (error) {
           console.error('Error during periodic save:', error);
         }
       }
     }, 30000); // Every 30 seconds
 
-    // Clean up
-    return () => {
-      clearInterval(saveInterval);
-    };
+    return () => clearInterval(saveInterval);
   }, [settings, data, currentTab, currentDzikirIndex]);
 
   // Save data when user leaves the page
   useEffect(() => {
-    // Function to save all data
     const saveAllData = () => {
       if (isLocalStorageAvailable()) {
         try {
-          // Save all data in one go
           localStorage.setItem('dzikirSettings', JSON.stringify(settings));
           localStorage.setItem('dzikirProgress', JSON.stringify(data));
           localStorage.setItem('dzikirCurrentTab', currentTab);
           localStorage.setItem('dzikirCurrentIndex', currentDzikirIndex.toString());
-
         } catch (error) {
           console.error('Error saving data before unload:', error);
         }
       }
     };
 
-    // Handler for beforeunload event (user leaving page)
-    const handleBeforeUnload = () => {
-      saveAllData();
-    };
-
-    // Add event listener for beforeunload
+    const handleBeforeUnload = () => saveAllData();
     window.addEventListener('beforeunload', handleBeforeUnload);
 
-    // Clean up when component unmounts
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       saveAllData(); // Also save when component unmounts
@@ -220,62 +203,35 @@ export const DzikirProvider = ({ children }) => {
 
   // Save all data when any state changes
   useEffect(() => {
-    // Use a debounce to avoid saving too frequently
     const saveTimeout = setTimeout(() => {
       if (isLocalStorageAvailable()) {
         try {
-          // Save all data in one go
           localStorage.setItem('dzikirSettings', JSON.stringify(settings));
           localStorage.setItem('dzikirProgress', JSON.stringify(data));
           localStorage.setItem('dzikirCurrentTab', currentTab);
           localStorage.setItem('dzikirCurrentIndex', currentDzikirIndex.toString());
-
         } catch (error) {
           console.error('Error saving data after state change:', error);
         }
       }
-    }, 300); // Shorter debounce for better responsiveness
+    }, 300); // Shorter debounce for responsiveness
 
     return () => clearTimeout(saveTimeout);
-  }, [settings, data, currentTab, currentDzikirIndex]); // Run whenever any of these state values change
+  }, [settings, data, currentTab, currentDzikirIndex]);
 
-  // We don't need to force save on mount anymore since we're loading from localStorage on init
-
-  // We don't need to verify localStorage on mount anymore
-  // since we're checking it during initialization
-
-  // Apply theme based on settings on mount
+  // Apply theme based on settings
   useEffect(() => {
-    // Apply theme immediately based on loaded settings
     if (settings.theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-
-
-  }, []);
-
-  // Apply theme when settings change
-  useEffect(() => {
-    // Apply theme
-    if (settings.theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-
   }, [settings.theme]);
-
-  // We don't need a separate effect for saving progress anymore
-  // since we're already saving all data in the combined useEffect
 
   // Switch tab (pagi/petang)
   const switchTab = (tab) => {
-    // Update state
     setCurrentTab(tab);
     setCurrentDzikirIndex(0);
-
   };
 
   // Navigate to next or previous dzikir
@@ -289,87 +245,44 @@ export const DzikirProvider = ({ children }) => {
     } else if (direction === 'prev' && currentDzikirIndex > 0) {
       newIndex = currentDzikirIndex - 1;
       setCurrentDzikirIndex(newIndex);
-    } else {
-      return; // No change
     }
-
-
   };
 
   // Update counter for current dzikir
   const updateCounter = (index, value) => {
-    // Create a deep copy of the data
     const newData = JSON.parse(JSON.stringify(data));
     newData[currentTab][index].counter = value;
-
-    // Update state
     setData(newData);
-
   };
 
   // Toggle theme
   const toggleTheme = () => {
     const newTheme = settings.theme === 'light' ? 'dark' : 'light';
-
-    // Update settings state
     setSettings({
       ...settings,
       theme: newTheme
     });
-
-
   };
 
   // Reset progress
   const resetProgress = () => {
     if (confirm('Apakah Anda yakin ingin mengatur ulang semua progress dzikir?')) {
-      // Create a fresh copy of the default data with all counters set to 0
       const resetData = JSON.parse(JSON.stringify(dzikirData));
-
-      // Make sure all counters are explicitly set to 0
       Object.keys(resetData).forEach(tab => {
         resetData[tab].forEach(dzikir => {
           dzikir.counter = 0;
         });
       });
-
-      // Update the state with reset data
       setData(resetData);
-
     }
   };
 
   // Update settings
   const updateSettings = (newSettings) => {
-    // Create updated settings object
-    const updatedSettings = { ...settings, ...newSettings };
-
-    // Update state
-    setSettings(updatedSettings);
-
+    setSettings({ ...settings, ...newSettings });
   };
 
-  // Clear all localStorage data (for debugging)
-  const clearAllStorage = () => {
-    if (confirm('PERHATIAN: Ini akan menghapus SEMUA data tersimpan. Lanjutkan?')) {
-      if (!isLocalStorageAvailable()) {
-        alert('Tidak dapat menghapus data: localStorage tidak tersedia');
-        return;
-      }
 
-      try {
-        localStorage.clear();
-
-
-        // Create a timestamp to prevent caching issues
-        const timestamp = new Date().getTime();
-        window.location.href = window.location.pathname + '?clear=' + timestamp;
-      } catch (error) {
-        console.error('Error clearing localStorage:', error);
-        alert('Terjadi kesalahan saat menghapus data: ' + error.message);
-      }
-    }
-  };
 
   return (
     <DzikirContext.Provider
@@ -385,7 +298,6 @@ export const DzikirProvider = ({ children }) => {
         resetProgress,
         updateSettings,
         setCurrentDzikirIndex,
-        clearAllStorage // Add the new debug function
       }}
     >
       {children}

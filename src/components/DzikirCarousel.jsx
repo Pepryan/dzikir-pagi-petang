@@ -185,7 +185,7 @@ const DzikirCarousel = () => {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="absolute top-14 right-4 bg-white/90 dark:bg-sky-900/80 rounded-full px-3 py-1 shadow-md text-xs flex items-center backdrop-blur-sm z-20"
+          className="absolute top-8 left-1/2 -translate-x-1/2 bg-white/90 dark:bg-sky-900/80 rounded-full px-3 py-1 shadow-md text-xs flex items-center backdrop-blur-sm z-20"
         >
           <FontAwesomeIcon icon={faArrowsLeftRight} className="mr-2 text-primary dark:text-sky-300" />
           <span className="dark:text-sky-100">Swipe untuk navigasi</span>
