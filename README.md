@@ -1,6 +1,8 @@
 <div align="center">
 
 # 📿 Dzikir Pagi Petang
+# بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
+## (Bismillahirrahmanirrahim - Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactjs.org/)
@@ -8,7 +10,12 @@
 
 Aplikasi web modern untuk dzikir pagi dan petang dengan antarmuka yang bersih dan ramah pengguna.
 
-[🌐 Lihat Demo](https://pepryan.github.io/dzikir-pagi-petang) | [🐛 Laporkan Bug](https://github.com/pepryan/dzikir-pagi-petang/issues) | [✨ Ajukan Fitur](https://github.com/pepryan/dzikir-pagi-petang/issues)
+# أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
+QS. Ar-Ra'd ayat 28
+## (Alaa bidzikrillahi tathma'innul quluub - Ingatlah, hanya dengan mengingat Allah hati menjadi tenang)
+
+
+[🌐 Lihat Demo](https://dzikiapp.my.id) | [🐛 Laporkan Bug](https://github.com/pepryan/dzikir-pagi-petang/issues) | [✨ Ajukan Fitur](https://github.com/pepryan/dzikir-pagi-petang/issues)
 
 </div>
 
@@ -73,7 +80,7 @@ Aplikasi web modern untuk dzikir pagi dan petang dengan antarmuka yang bersih da
    ```
    Server akan berjalan dengan fitur Hot Module Replacement (HMR) yang memungkinkan pembaruan instan saat kode diubah.
 
-4. Buka browser dan akses `http://localhost:5173/dzikir-pagi-petang/`
+4. Buka browser dan akses `http://localhost:5173/`
 
 ### Fitur Development
 
@@ -112,11 +119,11 @@ Aplikasi ini dikonfigurasi khusus untuk deployment di GitHub Pages dengan base U
    yarn deploy
    ```
    
-Konfigurasi Vite telah dioptimalkan untuk deployment di GitHub Pages dengan base URL `/dzikir-pagi-petang/`.
+<!-- Konfigurasi Vite telah dioptimalkan untuk deployment di GitHub Pages dengan base URL `/dzikir-pagi-petang/`. -->
 
 ## 🤝 Kontribusi
 
-Kami sangat menghargai kontribusi Anda! Berikut cara untuk berkontribusi:
+Berikut cara untuk berkontribusi:
 
 1. Fork repositori ini
 2. Buat branch fitur (`git checkout -b fitur/AmazingFeature`)
@@ -131,19 +138,25 @@ Kami sangat menghargai kontribusi Anda! Berikut cara untuk berkontribusi:
 - Update dokumentasi jika diperlukan
 - Pastikan semua test berjalan dengan baik
 
+
 ## 📝 Lisensi
 
 Proyek ini dilisensikan di bawah Lisensi MIT - lihat file [LICENSE](LICENSE) untuk detail.
 
-## 🙏 Penghargaan
+## 🙏 Thanks to
 
 - Inspirasi UI/UX dari berbagai aplikasi dzikir modern
-- Sumber konten dzikir dari literatur Islam yang terpercaya
+- Sumber konten dzikir dari literatur Islam yang terpercaya | [Referensi](https://almanhaj.or.id/11518-dzikir-pagi-dan-petang.html)
 
 ---
 
 <div align="center">
 
-Dibuat dengan ❤️ oleh Febryan Ramadhan untuk Umat Muslim
+Dibuat dengan ❤️ oleh Febryan Ramadhan untuk Umat Muslim.
+(جزاكم الله خيرا - Jazakumullahu khairan)
+
+بَارَكَ اللهُ فِيكُمْ 
+
+(Barakallahu fiikum - Semoga Allah memberkahimu)
 
 </div>
