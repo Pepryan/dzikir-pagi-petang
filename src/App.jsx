@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { DzikirProvider } from './context/DzikirContext';
 import Header from './components/Header';
 import DzikirCarousel from './components/DzikirCarousel';
-import SettingsDialog from './components/SettingsDialog';
-import AboutDialog from './components/AboutDialog';
+
+// Lazy load dialog components
+const SettingsDialog = lazy(() => import('./components/SettingsDialog'));
+const AboutDialog = lazy(() => import('./components/AboutDialog'));
 
 function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -67,16 +69,18 @@ function App() {
           )}
         </main>
 
-        <SettingsDialog
-          open={settingsOpen}
-          onOpenChange={setSettingsOpen}
-          openAbout={openAbout}
-        />
+        <Suspense fallback={null}>
+          <SettingsDialog
+            open={settingsOpen}
+            onOpenChange={setSettingsOpen}
+            openAbout={openAbout}
+          />
 
-        <AboutDialog
-          open={aboutOpen}
-          onOpenChange={setAboutOpen}
-        />
+          <AboutDialog
+            open={aboutOpen}
+            onOpenChange={setAboutOpen}
+          />
+        </Suspense>
       </div>
     </DzikirProvider>
   );
