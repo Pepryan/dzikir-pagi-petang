@@ -2,7 +2,7 @@
   "name": "Daily Dzikr - Dzikir Pagi & Petang",
   "short_name": "Daily Dzikr",
   "description": "Aplikasi dzikir pagi dan petang untuk memudahkan umat Muslim dalam mengamalkan dzikir sesuai sunnah",
-  "start_url": "/dzikir-pagi-petang/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0ea5e9",
   "theme_color": "#0ea5e9",
