@@ -61,7 +61,7 @@ const AboutDialog = ({ open, onOpenChange }) => {
           <div>
             <h4 className="font-medium text-base mb-1">Pengembang</h4>
             <p className="text-sm text-gray-700 dark:text-gray-300">
-              Dibuat dengan ❤️ untuk umat Muslim.
+              Dibuat dengan ❤️ oleh Febryan Ramadhan. Repo: <a href="https://github.com/Pepryan/dzikir-pagi-petang" className="text-primary-600 dark:text-primary">Github</a>.
             </p>
           </div>
         </div>
