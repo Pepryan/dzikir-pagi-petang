@@ -15,7 +15,7 @@ QS. Ar-Ra'd ayat 28
 ## (Alaa bidzikrillahi tathma'innul quluub - Ingatlah, hanya dengan mengingat Allah hati menjadi tenang)
 
 
-[🌐 Lihat Demo](https://dzikiapp.my.id) | [🐛 Laporkan Bug](https://github.com/pepryan/dzikir-pagi-petang/issues) | [✨ Ajukan Fitur](https://github.com/pepryan/dzikir-pagi-petang/issues)
+[🌐 Lihat Demo](https://dzikirapp.my.id) | [🐛 Laporkan Bug](https://github.com/pepryan/dzikir-pagi-petang/issues) | [✨ Ajukan Fitur](https://github.com/pepryan/dzikir-pagi-petang/issues)
 
 </div>
 
