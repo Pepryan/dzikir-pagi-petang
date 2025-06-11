@@ -94,6 +94,32 @@
     justify-content: center;
     align-items: center;
   }
+
+  /* Safari iOS Modal Fixes */
+  @supports (-webkit-touch-callout: none) {
+    /* Safari-specific modal overlay fixes */
+    [data-slot="dialog-overlay"] {
+      background-color: rgba(0, 0, 0, 0.5) !important;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .dark [data-slot="dialog-overlay"] {
+      background-color: rgba(0, 0, 0, 0.7) !important;
+    }
+
+    /* Safari-specific modal content fixes */
+    [data-slot="dialog-content"] {
+      background-color: white !important;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .dark [data-slot="dialog-content"] {
+      background-color: #111827 !important;
+      border-color: #374151;
+    }
+  }
 }
 
 @theme inline {
@@ -226,10 +252,40 @@
 }
 
 @layer base {
+  /* Performance optimizations */
   * {
     @apply border-border outline-ring/50;
+    box-sizing: border-box;
   }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
+    /* Performance optimizations */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeSpeed;
+    /* Prevent layout shifts */
+    overflow-x: hidden;
+  }
+
+  /* Optimize images and media */
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }

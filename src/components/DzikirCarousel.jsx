@@ -168,9 +168,18 @@ const DzikirCarousel = () => {
         keyboard={{
           enabled: true,
         }}
+        a11y={{
+          prevSlideMessage: 'Dzikir sebelumnya',
+          nextSlideMessage: 'Dzikir selanjutnya',
+          firstSlideMessage: 'Dzikir pertama',
+          lastSlideMessage: 'Dzikir terakhir',
+          paginationBulletMessage: 'Pergi ke dzikir {{index}}',
+        }}
         onSwiper={setSwiper}
         onSlideChange={handleSlideChange}
         className="w-full h-full mt-4"
+        role="region"
+        aria-label={`Dzikir ${currentTab} - ${currentDzikirIndex + 1} dari ${dzikirList.length}`}
       >
         {dzikirList.map((dzikir, index) => (
           <SwiperSlide key={dzikir.id} className="px-2 py-2">
@@ -205,6 +214,8 @@ const DzikirCarousel = () => {
                   ? 'bg-green-500 dark:bg-green-500'
                   : 'bg-neutral-800 dark:bg-sky-700'
               }`}
+              aria-label={isComplete ? 'Tandai belum selesai' : 'Tandai selesai'}
+              aria-pressed={isComplete}
             >
               {isComplete ? (
                 <>
@@ -227,6 +238,8 @@ const DzikirCarousel = () => {
                 onClick={handleDecrementClick}
                 className="w-12 h-12 flex items-center justify-center rounded-full bg-white/90 dark:bg-gray-800/90 shadow-lg backdrop-blur-sm text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
                 disabled={!currentDzikir || currentDzikir.counter <= 0}
+                aria-label="Kurangi hitungan dzikir"
+                title="Kurangi hitungan dzikir"
               >
                 <FontAwesomeIcon icon={faMinus} />
               </motion.button>
@@ -240,6 +253,9 @@ const DzikirCarousel = () => {
                   ? 'bg-green-500/90 dark:bg-green-600/90 text-white border-green-400 dark:border-green-500'
                   : 'bg-white/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700'
                   } border`}
+                aria-label={isComplete ? 'Tandai belum selesai' : 'Tandai selesai'}
+                aria-pressed={isComplete}
+                title={isComplete ? 'Tandai belum selesai' : 'Tandai selesai'}
               >
                 <FontAwesomeIcon icon={isComplete ? faCircleCheck : faCheck} />
               </motion.button>
@@ -251,6 +267,8 @@ const DzikirCarousel = () => {
                 onClick={handleIncrementClick}
                 className="w-12 h-12 flex items-center justify-center rounded-full bg-white/90 dark:bg-gray-800/90 shadow-lg backdrop-blur-sm text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
                 disabled={!currentDzikir || currentDzikir.counter >= currentDzikir.count}
+                aria-label="Tambah hitungan dzikir"
+                title="Tambah hitungan dzikir"
               >
                 <FontAwesomeIcon icon={faPlus} />
               </motion.button>

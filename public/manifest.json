@@ -1,51 +1,106 @@
 {
   "name": "Daily Dzikr - Dzikir Pagi & Petang",
   "short_name": "Daily Dzikr",
-  "description": "Aplikasi dzikir pagi dan petang untuk memudahkan umat Muslim dalam mengamalkan dzikir sesuai sunnah",
-  "start_url": "/",
+  "description": "Aplikasi dzikir pagi dan petang digital untuk memudahkan umat Muslim dalam mengamalkan dzikir sesuai sunnah. Fitur lengkap dengan terjemahan, latin, dan penghitung otomatis.",
+  "start_url": "/dzikir-pagi-petang/",
+  "scope": "/dzikir-pagi-petang/",
   "display": "standalone",
-  "background_color": "#0ea5e9",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
   "theme_color": "#0ea5e9",
+  "categories": ["lifestyle", "education", "utilities"],
+  "lang": "id",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "shortcuts": [
+    {
+      "name": "Dzikir Pagi",
+      "short_name": "Pagi",
+      "description": "Buka dzikir pagi",
+      "url": "/dzikir-pagi-petang/?tab=pagi",
+      "icons": [
+        {
+          "src": "moon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Dzikir Petang",
+      "short_name": "Petang",
+      "description": "Buka dzikir petang",
+      "url": "/dzikir-pagi-petang/?tab=petang",
+      "icons": [
+        {
+          "src": "moon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
   "icons": [
+    {
+      "src": "moon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
     {
       "src": "icons/icon-72x72.png",
       "sizes": "72x72",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "icons/icon-96x96.png",
       "sizes": "96x96",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "icons/icon-128x128.png",
       "sizes": "128x128",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "icons/icon-144x144.png",
       "sizes": "144x144",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "icons/icon-152x152.png",
       "sizes": "152x152",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "icons/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "icons/icon-384x384.png",
       "sizes": "384x384",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "icons/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
