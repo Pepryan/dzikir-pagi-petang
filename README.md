@@ -91,7 +91,7 @@ QS. Ar-Ra'd ayat 28
 
 ## 📦 Build dan Deployment
 
-Aplikasi ini dikonfigurasi khusus untuk deployment di GitHub Pages dengan base URL yang sesuai:
+Aplikasi ini dikonfigurasi untuk deployment di Cloudflare Pages dengan root path:
 
 1. Build proyek:
    ```bash
@@ -112,14 +112,13 @@ Aplikasi ini dikonfigurasi khusus untuk deployment di GitHub Pages dengan base U
    yarn preview
    ```
 
-3. Deploy ke GitHub Pages:
-   ```bash
-   npm run deploy
-   # atau
-   yarn deploy
-   ```
+3. Deploy ke Cloudflare Pages:
+   - Hubungkan repositori GitHub ke Cloudflare Pages
+   - Atur build command: `npm run build`
+   - Atur build output directory: `dist`
+   - Konfigurasi custom domain: `dzikirapp.my.id`
    
-<!-- Konfigurasi Vite telah dioptimalkan untuk deployment di GitHub Pages dengan base URL `/dzikir-pagi-petang/`. -->
+<!-- Konfigurasi Vite telah dioptimalkan untuk deployment di Cloudflare Pages dengan base URL `/`. -->
 
 ## 🤝 Kontribusi
 

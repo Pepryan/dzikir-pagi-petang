@@ -1,0 +1,16 @@
+name = "dzikir-pagi-petang"
+compatibility_date = "2024-01-01"
+
+[env.production]
+name = "dzikir-pagi-petang"
+route = "dzikirapp.my.id/*"
+
+# Build configuration
+[build]
+command = "npm run build"
+cwd = "."
+watch_dir = "src"
+
+# Pages configuration
+[pages]
+build_output_dir = "dist"
