@@ -25,7 +25,7 @@ function verifyThemeBeforeRender() {
     } else {
       // If no saved settings, use system preference
       const prefersDarkMode = window.matchMedia &&
-                             window.matchMedia('(prefers-color-scheme: dark)').matches;
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
 
       if (prefersDarkMode && !isDarkMode) {
         document.documentElement.classList.add('dark');
@@ -47,12 +47,14 @@ verifyThemeBeforeRender();
 // Register service worker for PWA functionality
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/dzikir-pagi-petang/sw.js')
-      .then((registration) => {
-        console.log('SW registered: ', registration);
+    // Use relative path for service worker to work in both dev and production
+    const swPath = import.meta.env.BASE_URL + 'sw.js';
+    navigator.serviceWorker.register(swPath)
+      .then(() => {
+        // Service worker registered successfully
       })
-      .catch((registrationError) => {
-        console.log('SW registration failed: ', registrationError);
+      .catch(() => {
+        // Service worker registration failed - silent fail for production
       });
   });
 }

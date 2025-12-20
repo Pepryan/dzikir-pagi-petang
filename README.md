@@ -1,12 +1,14 @@
 <div align="center">
 
-# 📿 Dzikir Pagi Petang
+# 📿 Daily Dzikr - Dzikir Pagi & Petang
 # بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
 ## (Bismillahirrahmanirrahim - Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![React](https://img.shields.io/badge/React_19-20232A?style=flat&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Vite](https://img.shields.io/badge/Vite_6-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![PWA](https://img.shields.io/badge/PWA-Enabled-5A0FC8?style=flat&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
 
 Aplikasi web modern untuk dzikir pagi dan petang dengan antarmuka yang bersih dan ramah pengguna.
 
@@ -22,103 +24,115 @@ QS. Ar-Ra'd ayat 28
 ## ✨ Fitur Utama
 
 - 🎨 **Antarmuka Modern**: 
-  - Dibangun dengan Tailwind CSS dan komponen shadcn/ui
+  - Dibangun dengan Tailwind CSS v4 dan komponen shadcn/ui
   - Desain responsif yang elegan dan intuitif
   - Tema terang dan gelap yang dapat disesuaikan
+  - Pilihan font Arab yang bervariasi
 
 - 📱 **Optimasi Mobile**: 
   - Navigasi dengan gesture geser (swipe)
   - Tampilan yang responsif untuk semua ukuran layar
   - Pengalaman pengguna yang mulus di perangkat mobile
+  - PWA (Progressive Web App) - dapat di-install sebagai aplikasi
 
 - 🔄 **Fitur Pelacakan**: 
   - Progress bar visual untuk memantau kemajuan
   - Indikator navigasi yang intuitif
   - Penyimpanan progres otomatis
+  - Mode penghitung (marker & counter)
 
 - 💾 **Penyimpanan Data**: 
   - Menyimpan kemajuan dzikir secara otomatis
   - Pengaturan preferensi pengguna yang persisten
   - Data tersimpan di penyimpanan lokal browser
+  - Dukungan offline dengan Service Worker
 
 ## 🛠️ Teknologi
 
-- **Frontend Framework**: [React](https://reactjs.org/) dengan [TypeScript](https://www.typescriptlang.org/)
-- **Build Tool**: [Vite](https://vitejs.dev/) untuk pengembangan yang cepat
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) untuk desain yang fleksibel
-- **Komponen UI**: [shadcn/ui](https://ui.shadcn.com/) untuk komponen yang konsisten
-- **Animasi**: [Framer Motion](https://www.framer.com/motion/) untuk transisi halus
-- **Navigasi**: [Swiper](https://swiperjs.com/) untuk gesture swipe
+| Teknologi | Versi | Deskripsi |
+|-----------|-------|-----------|
+| [React](https://reactjs.org/) | 19.x | Frontend Framework |
+| [Vite](https://vitejs.dev/) | 6.x | Build Tool & Dev Server |
+| [Tailwind CSS](https://tailwindcss.com/) | 4.x | Utility-first CSS Framework |
+| [shadcn/ui](https://ui.shadcn.com/) | - | Komponen UI (Radix UI) |
+| [Framer Motion](https://www.framer.com/motion/) | 12.x | Animasi & Transisi |
+| [Swiper](https://swiperjs.com/) | 11.x | Gesture Swipe Navigation |
+| [Lucide React](https://lucide.dev/) | - | Icon Library |
+| [Font Awesome](https://fontawesome.com/) | 6.x | Icon Library |
 
 ## 🚀 Memulai
 
 ### Prasyarat
 
-- Node.js (versi 16 atau lebih baru)
-- npm atau yarn
+- Node.js (versi 18 atau lebih baru)
+- npm, yarn, atau pnpm
 
 ### Instalasi
 
 1. Clone repositori:
    ```bash
-   git clone https://github.com/yourusername/dzikir-pagi-petang.git
+   git clone https://github.com/pepryan/dzikir-pagi-petang.git
    cd dzikir-pagi-petang
    ```
 
 2. Install dependensi:
    ```bash
    npm install
-   # atau
-   yarn install
    ```
 
 3. Jalankan server pengembangan:
    ```bash
    npm run dev
-   # atau
-   yarn dev
    ```
    Server akan berjalan dengan fitur Hot Module Replacement (HMR) yang memungkinkan pembaruan instan saat kode diubah.
 
 4. Buka browser dan akses `http://localhost:5173/`
 
-### Fitur Development
+### Script yang Tersedia
 
-- 🔥 **Hot Module Replacement (HMR)**: Pembaruan instan tanpa refresh browser
-- 📦 **Code Splitting**: Optimasi chunk untuk vendor dan komponen utama
-- 🔍 **Path Alias**: Menggunakan `@/` untuk import dari direktori `src`
-- 🛠️ **Build Optimization**: Konfigurasi khusus untuk performa optimal
+| Script | Deskripsi |
+|--------|-----------|
+| `npm run dev` | Menjalankan development server dengan HMR |
+| `npm run build` | Build production ke folder `dist/` |
+| `npm run preview` | Preview hasil build production |
+| `npm run lint` | Menjalankan ESLint untuk pengecekan kode |
 
 ## 📦 Build dan Deployment
 
-Aplikasi ini dikonfigurasi untuk deployment di Cloudflare Pages dengan root path:
+Aplikasi ini dikonfigurasi untuk deployment di Cloudflare Pages:
 
 1. Build proyek:
    ```bash
    npm run build
-   # atau
-   yarn build
    ```
    Proses build akan menghasilkan output teroptimasi dengan:
    - Code splitting otomatis
    - Minifikasi dan kompresi aset
-   - Pembagian chunk vendor terpisah
-   - Optimasi gambar dan aset statis
+   - Tree shaking untuk bundle yang lebih kecil
+   - Lazy loading untuk komponen dialog
 
-2. Preview hasil build (opsional):
-   ```bash
-   npm run preview
-   # atau
-   yarn preview
-   ```
-
-3. Deploy ke Cloudflare Pages:
+2. Deploy ke Cloudflare Pages:
    - Hubungkan repositori GitHub ke Cloudflare Pages
    - Atur build command: `npm run build`
    - Atur build output directory: `dist`
-   - Konfigurasi custom domain: `dzikirapp.my.id`
-   
-<!-- Konfigurasi Vite telah dioptimalkan untuk deployment di Cloudflare Pages dengan base URL `/`. -->
+   - Custom domain: `dzikirapp.my.id`
+
+## 📁 Struktur Proyek
+
+```
+dzikir-pagi-petang/
+├── public/              # Static assets (icons, manifest, sw.js)
+├── src/
+│   ├── components/      # React components
+│   │   └── ui/          # shadcn/ui components
+│   ├── context/         # React context (DzikirContext)
+│   ├── data/            # Data dzikir (pagi & petang)
+│   ├── lib/             # Utility functions
+│   └── index.css        # Global styles & Tailwind config
+├── index.html           # Entry HTML
+├── vite.config.js       # Vite configuration
+└── tailwind.config.js   # Tailwind configuration
+```
 
 ## 🤝 Kontribusi
 
@@ -135,8 +149,7 @@ Berikut cara untuk berkontribusi:
 - Pastikan kode mengikuti standar format yang ada
 - Tambahkan komentar untuk kode yang kompleks
 - Update dokumentasi jika diperlukan
-- Pastikan semua test berjalan dengan baik
-
+- Test perubahan sebelum membuat PR
 
 ## 📝 Lisensi
 
@@ -157,5 +170,7 @@ Dibuat dengan ❤️ oleh Febryan Ramadhan untuk Umat Muslim.
 بَارَكَ اللهُ فِيكُمْ 
 
 (Barakallahu fiikum - Semoga Allah memberkahimu)
+
+**v2.1.0** | Desember 2025
 
 </div>

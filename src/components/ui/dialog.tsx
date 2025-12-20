@@ -59,19 +59,21 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          // Enhanced background for Safari iOS compatibility
-          "bg-background border-border",
-          // Safari iOS fix: Ensure solid background
+          // Solid background - use explicit colors to prevent transparency issues
           "bg-white dark:bg-gray-900",
+          // Border styling
+          "border-border border",
           // Animation and positioning
           "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
           "fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%]",
           // Layout and styling
-          "gap-3 rounded-lg border p-4 sm:p-6 shadow-lg duration-200 sm:max-w-lg",
-          // Safari iOS specific fixes
-          "-webkit-transform: translate(-50%, -50%)",
+          "gap-3 rounded-lg p-4 sm:p-6 shadow-lg duration-200 sm:max-w-lg",
+          // Ensure proper stacking context
+          "isolate",
           className
         )}
+        // Inline style as fallback for solid background
+        style={{ backgroundColor: 'var(--dialog-bg, white)' }}
         {...props}
       >
         {children}

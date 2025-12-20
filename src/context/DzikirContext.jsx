@@ -1,6 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import dzikirData from '../data/dzikir';
 
+// App version - update this for new releases
+const APP_VERSION = '2.1.0';
+
 // Function to check if localStorage is available and working
 const isLocalStorageAvailable = () => {
   try {
@@ -33,7 +36,7 @@ export const DzikirProvider = ({ children }) => {
         showSource: true,
         autoNext: false,
         showSwipeIndicator: true,
-        version: '2.0.0'
+        version: APP_VERSION
       };
     }
 
@@ -50,10 +53,11 @@ export const DzikirProvider = ({ children }) => {
           showSource: true,
           autoNext: false,
           showSwipeIndicator: true,
-          version: '2.0.0'
+          version: APP_VERSION
         };
         // Create a complete settings object with defaults for any missing properties
-        return { ...defaultSettings, ...parsedSettings };
+        // Always use version from code, not from localStorage (prevents stale version display)
+        return { ...defaultSettings, ...parsedSettings, version: APP_VERSION };
       }
     } catch (error) {
       console.error('Error loading initial settings:', error);
@@ -70,7 +74,7 @@ export const DzikirProvider = ({ children }) => {
       showSwipeIndicator: true,
       arabicFont: 'Noto Naskh Arabic',
       arabicFontSize: 28,
-      version: '2.0.0'
+      version: APP_VERSION
     };
   };
 

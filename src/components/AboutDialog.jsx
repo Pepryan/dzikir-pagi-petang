@@ -3,6 +3,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -15,16 +16,14 @@ const AboutDialog = ({ open, onOpenChange }) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        className="sm:max-w-md max-h-[90vh] overflow-y-auto"
-        aria-describedby="about-description"
-      >
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Tentang Aplikasi</DialogTitle>
-          <p id="about-description" className="text-sm text-muted-foreground">
-            Informasi tentang aplikasi Daily Dzikr.
-          </p>
         </DialogHeader>
+        <DialogDescription className="text-sm text-muted-foreground">
+          Informasi tentang aplikasi Daily Dzikr.
+        </DialogDescription>
+
 
         <div className="space-y-4 py-2">
           <div className="text-center mb-3">

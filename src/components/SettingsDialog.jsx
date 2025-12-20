@@ -3,6 +3,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -24,10 +25,13 @@ const SettingsDialog = ({ open, onOpenChange, openAbout }) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[800px] sm:h-auto max-h-screen sm:max-h-none overflow-y-auto" aria-describedby="settings-description">
+      <DialogContent className="sm:max-w-[800px] sm:h-auto max-h-screen sm:max-h-none overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Pengaturan</DialogTitle>
         </DialogHeader>
+        <DialogDescription className="sr-only">
+          Pengaturan aplikasi dzikir untuk menyesuaikan tampilan dan preferensi
+        </DialogDescription>
 
         <div className="space-y-4 py-2">
           <div className="space-y-2">
@@ -169,112 +173,112 @@ const SettingsDialog = ({ open, onOpenChange, openAbout }) => {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-6">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id="font-amiri"
-                  name="arabic-font"
-                  value="Amiri Quran"
-                  checked={settings.arabicFont === 'Amiri Quran'}
-                  onChange={(e) => updateSettings({ arabicFont: e.target.value })}
-                  className="w-4 h-4 text-primary-600 focus:ring-primary-500"
-                />
-                <label htmlFor="font-amiri" className="text-sm">
-                  Amiri Quran
-                </label>
-              </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="font-amiri"
+                    name="arabic-font"
+                    value="Amiri Quran"
+                    checked={settings.arabicFont === 'Amiri Quran'}
+                    onChange={(e) => updateSettings({ arabicFont: e.target.value })}
+                    className="w-4 h-4 text-primary-600 focus:ring-primary-500"
+                  />
+                  <label htmlFor="font-amiri" className="text-sm">
+                    Amiri Quran
+                  </label>
+                </div>
 
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id="font-scheherazade"
-                  name="arabic-font"
-                  value="Scheherazade New"
-                  checked={settings.arabicFont === 'Scheherazade New'}
-                  onChange={(e) => updateSettings({ arabicFont: e.target.value })}
-                  className="w-4 h-4 text-primary-600 focus:ring-primary-500"
-                />
-                <label htmlFor="font-scheherazade" className="text-sm">
-                  Scheherazade New
-                </label>
-              </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="font-scheherazade"
+                    name="arabic-font"
+                    value="Scheherazade New"
+                    checked={settings.arabicFont === 'Scheherazade New'}
+                    onChange={(e) => updateSettings({ arabicFont: e.target.value })}
+                    className="w-4 h-4 text-primary-600 focus:ring-primary-500"
+                  />
+                  <label htmlFor="font-scheherazade" className="text-sm">
+                    Scheherazade New
+                  </label>
+                </div>
 
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id="font-noto-naskh"
-                  name="arabic-font"
-                  value="Noto Naskh Arabic"
-                  checked={settings.arabicFont === 'Noto Naskh Arabic'}
-                  onChange={(e) => updateSettings({ arabicFont: e.target.value })}
-                  className="w-4 h-4 text-primary-600 focus:ring-primary-500"
-                />
-                <label htmlFor="font-noto-naskh" className="text-sm">
-                  Noto Naskh Arabic
-                </label>
-              </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="font-noto-naskh"
+                    name="arabic-font"
+                    value="Noto Naskh Arabic"
+                    checked={settings.arabicFont === 'Noto Naskh Arabic'}
+                    onChange={(e) => updateSettings({ arabicFont: e.target.value })}
+                    className="w-4 h-4 text-primary-600 focus:ring-primary-500"
+                  />
+                  <label htmlFor="font-noto-naskh" className="text-sm">
+                    Noto Naskh Arabic
+                  </label>
+                </div>
 
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id="font-playpen-sans"
-                  name="arabic-font"
-                  value="Playpen Sans"
-                  checked={settings.arabicFont === 'Playpen Sans'}
-                  onChange={(e) => updateSettings({ arabicFont: e.target.value })}
-                  className="w-4 h-4 text-primary-600 focus:ring-primary-500"
-                />
-                <label htmlFor="font-playpen-sans" className="text-sm">
-                  Playpen Sans
-                </label>
-              </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="font-playpen-sans"
+                    name="arabic-font"
+                    value="Playpen Sans"
+                    checked={settings.arabicFont === 'Playpen Sans'}
+                    onChange={(e) => updateSettings({ arabicFont: e.target.value })}
+                    className="w-4 h-4 text-primary-600 focus:ring-primary-500"
+                  />
+                  <label htmlFor="font-playpen-sans" className="text-sm">
+                    Playpen Sans
+                  </label>
+                </div>
 
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id="font-lateef"
-                  name="arabic-font"
-                  value="Lateef"
-                  checked={settings.arabicFont === 'Lateef'}
-                  onChange={(e) => updateSettings({ arabicFont: e.target.value })}
-                  className="w-4 h-4 text-primary-600 focus:ring-primary-500"
-                />
-                <label htmlFor="font-lateef" className="text-sm">
-                  Lateef
-                </label>
-              </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="font-lateef"
+                    name="arabic-font"
+                    value="Lateef"
+                    checked={settings.arabicFont === 'Lateef'}
+                    onChange={(e) => updateSettings({ arabicFont: e.target.value })}
+                    className="w-4 h-4 text-primary-600 focus:ring-primary-500"
+                  />
+                  <label htmlFor="font-lateef" className="text-sm">
+                    Lateef
+                  </label>
+                </div>
 
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id="font-harmattan"
-                  name="arabic-font"
-                  value="Harmattan"
-                  checked={settings.arabicFont === 'Harmattan'}
-                  onChange={(e) => updateSettings({ arabicFont: e.target.value })}
-                  className="w-4 h-4 text-primary-600 focus:ring-primary-500"
-                />
-                <label htmlFor="font-harmattan" className="text-sm">
-                  Harmattan
-                </label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="font-harmattan"
+                    name="arabic-font"
+                    value="Harmattan"
+                    checked={settings.arabicFont === 'Harmattan'}
+                    onChange={(e) => updateSettings({ arabicFont: e.target.value })}
+                    className="w-4 h-4 text-primary-600 focus:ring-primary-500"
+                  />
+                  <label htmlFor="font-harmattan" className="text-sm">
+                    Harmattan
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <h3 className="font-medium text-lg">Navigasi</h3>
+            <div className="space-y-2">
+              <h3 className="font-medium text-lg">Navigasi</h3>
 
-            <div className="flex items-center justify-between">
-              <label htmlFor="auto-next" className="text-sm">
-                Otomatis ke Dzikir Berikutnya
-              </label>
-              <Switch
-                id="auto-next"
-                checked={settings.autoNext}
-                onCheckedChange={() => handleSwitchChange('autoNext')}
-              />
+              <div className="flex items-center justify-between">
+                <label htmlFor="auto-next" className="text-sm">
+                  Otomatis ke Dzikir Berikutnya
+                </label>
+                <Switch
+                  id="auto-next"
+                  checked={settings.autoNext}
+                  onCheckedChange={() => handleSwitchChange('autoNext')}
+                />
+              </div>
             </div>
-          </div>
           </div>
         </div>
 
