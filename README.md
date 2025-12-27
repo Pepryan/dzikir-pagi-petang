@@ -38,7 +38,8 @@ QS. Ar-Ra'd ayat 28
 
 - 📖 **Pembaca Al-Quran**:
   - Surah pilihan: Al-Mulk, Al-Kahfi, Yasin, Al-Waqiah
-  - Navigasi dengan swipe (mobile) atau arrow keys (desktop)
+  - **Mode Scroll**: Tampilan continuous untuk membaca semua ayat sekaligus
+  - **Mode Per Ayat**: Navigasi dengan swipe (mobile) atau arrow keys (desktop)
   - Fitur jump-to-ayat untuk langsung ke ayat tertentu
   - Bookmark otomatis - melanjutkan dari posisi terakhir
   - Salin ayat ke clipboard
@@ -207,6 +208,6 @@ Dibuat dengan ❤️ oleh Febryan Ramadhan untuk Umat Muslim.
 
 (Barakallahu fiikum - Semoga Allah memberkahimu)
 
-**v3.1.3** | Desember 2025
+**v3.2.0** | Desember 2025
 
 </div>

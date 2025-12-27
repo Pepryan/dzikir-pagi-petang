@@ -30,3 +30,14 @@ Object.defineProperty(window, 'matchMedia', {
         dispatchEvent: vi.fn(),
     })),
 });
+
+// Mock IntersectionObserver
+class MockIntersectionObserver {
+    constructor(callback) {
+        this.callback = callback;
+    }
+    observe() { }
+    unobserve() { }
+    disconnect() { }
+}
+global.IntersectionObserver = MockIntersectionObserver;

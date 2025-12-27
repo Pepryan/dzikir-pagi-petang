@@ -149,6 +149,31 @@
   .safe-area-top {
     padding-top: env(safe-area-inset-top, 0px);
   }
+
+  /* Quran Scroll View Styles */
+  .quran-scroll-container {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .quran-arabic-text {
+    word-spacing: 8px;
+  }
+
+  .ayat-number-inline {
+    font-size: 0.75em;
+    vertical-align: middle;
+    opacity: 0.8;
+  }
+
+  .ayat-detail-item {
+    scroll-margin-top: 20px;
+  }
+
+  /* Smooth highlight transition for scroll mode */
+  .ayat-detail-item.active {
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
+  }
 }
 
 @theme inline {

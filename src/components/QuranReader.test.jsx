@@ -193,4 +193,42 @@ describe('QuranReader', () => {
             expect(screen.getByText('Pilih surah pilihan untuk dibaca')).toBeInTheDocument();
         });
     });
+
+    describe('View Mode Toggle', () => {
+        it('should render view mode toggle button', () => {
+            renderWithProvider(<QuranReader surah={mockSurah} />);
+
+            expect(screen.getByText('Mode Scroll')).toBeInTheDocument();
+        });
+
+        it('should toggle to scroll mode when clicking toggle button', async () => {
+            renderWithProvider(<QuranReader surah={mockSurah} />);
+
+            const toggleButton = screen.getByText('Mode Scroll');
+            fireEvent.click(toggleButton);
+
+            await waitFor(() => {
+                expect(screen.getByText('Mode Per Ayat')).toBeInTheDocument();
+            });
+        });
+
+        it('should display all ayat in scroll mode', async () => {
+            // Mock settings with scroll mode
+            localStorage.getItem.mockImplementation((key) => {
+                if (key === 'dzikirSettings') {
+                    return JSON.stringify({ quranViewMode: 'scroll' });
+                }
+                return null;
+            });
+
+            renderWithProvider(<QuranReader surah={mockSurah} />);
+
+            // In scroll mode, all Arabic texts should be visible
+            await waitFor(() => {
+                expect(screen.getByText(/إِذَا وَقَعَتِ الْوَاقِعَةُ/)).toBeInTheDocument();
+                expect(screen.getByText(/لَيْسَ لِوَقْعَتِهَا كَاذِبَةٌ/)).toBeInTheDocument();
+                expect(screen.getByText(/خَافِضَةٌ رَّافِعَةٌ/)).toBeInTheDocument();
+            });
+        });
+    });
 });

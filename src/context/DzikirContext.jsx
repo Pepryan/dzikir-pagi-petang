@@ -35,6 +35,7 @@ export const DzikirProvider = ({ children }) => {
         showSource: true,
         autoNext: false,
         showSwipeIndicator: true,
+        quranViewMode: 'page', // 'page' or 'scroll'
         version: APP_VERSION
       };
     }
@@ -52,6 +53,7 @@ export const DzikirProvider = ({ children }) => {
           showSource: true,
           autoNext: false,
           showSwipeIndicator: true,
+          quranViewMode: 'page',
           version: APP_VERSION
         };
         // Create a complete settings object with defaults for any missing properties
@@ -73,6 +75,7 @@ export const DzikirProvider = ({ children }) => {
       showSwipeIndicator: true,
       arabicFont: 'Noto Naskh Arabic',
       arabicFontSize: 28,
+      quranViewMode: 'page',
       version: APP_VERSION
     };
   };
