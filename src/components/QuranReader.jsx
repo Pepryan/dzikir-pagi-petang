@@ -176,7 +176,7 @@ const QuranReader = ({ surah }) => {
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-gray-800 dark:bg-gray-700 text-white px-4 py-2 rounded-full shadow-lg text-sm"
+                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-gray-800 dark:bg-gray-700 text-white px-5 py-2.5 rounded-full shadow-lg text-sm whitespace-nowrap max-w-[90vw]"
                     >
                         {toast}
                     </motion.div>
@@ -219,9 +219,19 @@ const QuranReader = ({ surah }) => {
             <div className="flex items-center justify-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-4 px-2">
                 <button
                     onClick={() => setShowJumpInput(!showJumpInput)}
-                    className="flex items-center gap-2 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-full 
+                        bg-green-100 dark:bg-green-900/30 
+                        border border-green-300 dark:border-green-700
+                        text-green-700 dark:text-green-400 
+                        hover:bg-green-200 dark:hover:bg-green-900/50 
+                        hover:border-green-400 dark:hover:border-green-600
+                        active:scale-95 transition-all duration-200"
+                    title="Klik untuk pindah ke ayat lain"
                 >
-                    <span className="font-medium">Ayat {currentAyat.number}</span>
+                    <span className="font-semibold text-sm">Ayat {currentAyat.number}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
                 </button>
 
                 <div className="flex-1 max-w-48 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
