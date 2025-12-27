@@ -1,20 +1,25 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { DzikirProvider } from './context/DzikirContext';
+import { DzikirProvider, useDzikir } from './context/DzikirContext';
 import Header from './components/Header';
 import DzikirCarousel from './components/DzikirCarousel';
+import BottomNav from './components/BottomNav';
+import QuranView from './components/QuranView';
+import DoaView from './components/DoaView';
 
 // Lazy load dialog components
 const SettingsDialog = lazy(() => import('./components/SettingsDialog'));
 const AboutDialog = lazy(() => import('./components/AboutDialog'));
+const StatsDialog = lazy(() => import('./components/StatsDialog'));
 
-function App() {
+function AppContent() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [statsOpen, setStatsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('dzikir');
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   // Load Arabic fonts
   useEffect(() => {
-    // Create link elements for the Arabic fonts
     const fontLinks = [
       'https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap',
       'https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap',
@@ -29,17 +34,14 @@ function App() {
       return link;
     });
 
-    // Add all font links to head
     fontLinks.forEach(link => document.head.appendChild(link));
 
-    // Set fonts as loaded when all fonts are loaded
     Promise.all(fontLinks.map(link => {
       return new Promise((resolve) => {
         link.onload = resolve;
       });
     })).then(() => setFontsLoaded(true));
 
-    // Cleanup
     return () => {
       fontLinks.forEach(link => document.head.removeChild(link));
     };
@@ -51,37 +53,91 @@ function App() {
     setAboutOpen(true);
   };
 
-  return (
-    <DzikirProvider>
-      <div className="h-screen max-h-screen overflow-hidden flex flex-col bg-background dark:bg-background transition-colors duration-300">
-        <Header openSettings={openSettings} />
+  // Handle tab change
+  const handleTabChange = (tab) => {
+    if (tab === 'stats') {
+      setStatsOpen(true);
+    } else {
+      setActiveTab(tab);
+    }
+  };
 
-        <main className="container mx-auto px-2 py-2 flex-1 flex items-center justify-center overflow-hidden">
-          {fontsLoaded ? (
+  // Render main content based on active tab
+  const renderContent = () => {
+    if (!fontsLoaded) {
+      return (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">Memuat...</p>
+          </div>
+        </div>
+      );
+    }
+
+    switch (activeTab) {
+      case 'dzikir':
+        return (
+          <main className="container mx-auto px-2 py-2 flex-1 flex items-center justify-center overflow-hidden">
             <div className="w-full max-w-3xl mx-auto h-full">
               <DzikirCarousel />
             </div>
-          ) : (
-            <div className="text-center">
-              <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
-              <p className="mt-4 text-gray-600 dark:text-gray-300">Memuat...</p>
-            </div>
-          )}
-        </main>
+          </main>
+        );
+      case 'quran':
+        return (
+          <main className="flex-1 overflow-hidden">
+            <QuranView />
+          </main>
+        );
+      case 'doa':
+        return (
+          <main className="flex-1 overflow-hidden">
+            <DoaView />
+          </main>
+        );
+      default:
+        return null;
+    }
+  };
 
-        <Suspense fallback={null}>
-          <SettingsDialog
-            open={settingsOpen}
-            onOpenChange={setSettingsOpen}
-            openAbout={openAbout}
-          />
+  return (
+    <div className="h-screen max-h-screen overflow-hidden flex flex-col bg-background dark:bg-background transition-colors duration-300">
+      <Header
+        openSettings={openSettings}
+        activeTab={activeTab}
+      />
 
-          <AboutDialog
-            open={aboutOpen}
-            onOpenChange={setAboutOpen}
-          />
-        </Suspense>
-      </div>
+      {renderContent()}
+
+      {/* Bottom Navigation */}
+      <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
+
+      <Suspense fallback={null}>
+        <SettingsDialog
+          open={settingsOpen}
+          onOpenChange={setSettingsOpen}
+          openAbout={openAbout}
+        />
+
+        <AboutDialog
+          open={aboutOpen}
+          onOpenChange={setAboutOpen}
+        />
+
+        <StatsDialog
+          open={statsOpen}
+          onOpenChange={setStatsOpen}
+        />
+      </Suspense>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <DzikirProvider>
+      <AppContent />
     </DzikirProvider>
   );
 }

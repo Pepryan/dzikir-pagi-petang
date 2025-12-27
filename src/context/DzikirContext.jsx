@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import dzikirData from '../data/dzikir';
+import { recordCompletion, getStatsSummary } from '../data/statsData';
 
 // App version - update this for new releases
-const APP_VERSION = '2.1.0';
+const APP_VERSION = '3.0.0';
 
 // Function to check if localStorage is available and working
 const isLocalStorageAvailable = () => {
@@ -286,6 +287,19 @@ export const DzikirProvider = ({ children }) => {
     setSettings({ ...settings, ...newSettings });
   };
 
+  // Check if all dzikir in current tab are complete and record to stats
+  const checkAndRecordCompletion = (tabName, tabData) => {
+    const allComplete = tabData.every(dzikir => dzikir.counter >= dzikir.count);
+    if (allComplete) {
+      recordCompletion(tabName);
+    }
+  };
+
+  // Get current stats summary
+  const getStats = () => {
+    return getStatsSummary();
+  };
+
 
 
   return (
@@ -302,6 +316,8 @@ export const DzikirProvider = ({ children }) => {
         resetProgress,
         updateSettings,
         setCurrentDzikirIndex,
+        checkAndRecordCompletion,
+        getStats,
       }}
     >
       {children}

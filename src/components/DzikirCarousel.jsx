@@ -29,7 +29,8 @@ const DzikirCarousel = () => {
     data,
     settings,
     setCurrentDzikirIndex,
-    updateCounter
+    updateCounter,
+    checkAndRecordCompletion
   } = useDzikir();
   const [swiper, setSwiper] = useState(null);
   const dzikirList = data[currentTab];
@@ -65,13 +66,12 @@ const DzikirCarousel = () => {
             <motion.button
               key={index}
               onClick={() => swiper?.slideTo(index)}
-              className={`nav-dot flex items-center justify-center ${
-                isActive
-                  ? 'nav-dot-active'
-                  : isComplete
-                    ? 'nav-dot-completed'
-                    : 'nav-dot-inactive'
-              }`}
+              className={`nav-dot flex items-center justify-center ${isActive
+                ? 'nav-dot-active'
+                : isComplete
+                  ? 'nav-dot-completed'
+                  : 'nav-dot-inactive'
+                }`}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
               aria-label={`Go to slide ${index + 1}`}
@@ -96,6 +96,15 @@ const DzikirCarousel = () => {
     // Toggle between 0 and full count
     updateCounter(currentDzikirIndex, newValue);
 
+    // Check if all dzikir are complete and record to stats
+    if (!wasComplete && newValue > 0) {
+      // Create updated data to check completion
+      const updatedList = dzikirList.map((d, i) =>
+        i === currentDzikirIndex ? { ...d, counter: newValue } : d
+      );
+      checkAndRecordCompletion(currentTab, updatedList);
+    }
+
     // Add haptic feedback if available
     if (navigator.vibrate) {
       navigator.vibrate(50);
@@ -117,6 +126,14 @@ const DzikirCarousel = () => {
 
     const newValue = currentDzikir.counter + 1;
     updateCounter(currentDzikirIndex, newValue);
+
+    // Check if all dzikir are complete and record to stats
+    if (newValue >= currentDzikir.count) {
+      const updatedList = dzikirList.map((d, i) =>
+        i === currentDzikirIndex ? { ...d, counter: newValue } : d
+      );
+      checkAndRecordCompletion(currentTab, updatedList);
+    }
 
     // Add haptic feedback if available
     if (navigator.vibrate) {
@@ -202,18 +219,17 @@ const DzikirCarousel = () => {
       )}
 
       {/* Action buttons at bottom - Improved UI */}
-      <div className="fixed bottom-8 left-0 right-0 z-50 flex justify-center items-center">
+      <div className="fixed bottom-24 left-0 right-0 z-40 flex justify-center items-center">
         <div className="flex space-x-4">
           {settings.countingMethod === 'marker' ? (
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleMarkClick}
-              className={`px-6 py-3.5 rounded-full shadow-lg text-white flex items-center ${
-                isComplete
-                  ? 'bg-green-500 dark:bg-green-500'
-                  : 'bg-neutral-800 dark:bg-sky-700'
-              }`}
+              className={`px-6 py-3.5 rounded-full shadow-lg text-white flex items-center ${isComplete
+                ? 'bg-green-500 dark:bg-green-500'
+                : 'bg-neutral-800 dark:bg-sky-700'
+                }`}
               aria-label={isComplete ? 'Tandai belum selesai' : 'Tandai selesai'}
               aria-pressed={isComplete}
             >
