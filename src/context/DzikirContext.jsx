@@ -3,7 +3,7 @@ import dzikirData from '../data/dzikir';
 import { recordCompletion, getStatsSummary } from '../data/statsData';
 
 // App version - update this for new releases
-const APP_VERSION = '3.0.0';
+const APP_VERSION = '3.1.0';
 
 // Function to check if localStorage is available and working
 const isLocalStorageAvailable = () => {
@@ -300,7 +300,31 @@ export const DzikirProvider = ({ children }) => {
     return getStatsSummary();
   };
 
+  // Quran bookmark/last read functions
+  const saveQuranProgress = (surahId, ayatIndex) => {
+    if (!isLocalStorageAvailable()) return;
+    try {
+      const quranProgress = JSON.parse(localStorage.getItem('quranProgress') || '{}');
+      quranProgress[surahId] = {
+        ayatIndex,
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem('quranProgress', JSON.stringify(quranProgress));
+    } catch (error) {
+      console.error('Error saving Quran progress:', error);
+    }
+  };
 
+  const getQuranProgress = (surahId) => {
+    if (!isLocalStorageAvailable()) return null;
+    try {
+      const quranProgress = JSON.parse(localStorage.getItem('quranProgress') || '{}');
+      return quranProgress[surahId] || null;
+    } catch (error) {
+      console.error('Error getting Quran progress:', error);
+      return null;
+    }
+  };
 
   return (
     <DzikirContext.Provider
@@ -318,6 +342,8 @@ export const DzikirProvider = ({ children }) => {
         setCurrentDzikirIndex,
         checkAndRecordCompletion,
         getStats,
+        saveQuranProgress,
+        getQuranProgress,
       }}
     >
       {children}

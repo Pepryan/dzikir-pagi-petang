@@ -12,6 +12,13 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // Vitest configuration
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.js'],
+    include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
+  },
   build: {
     chunkSizeWarningLimit: 600, // Increase the warning limit to 600kb
     // SEO and Performance optimizations
@@ -51,3 +58,4 @@ export default defineConfig({
     include: ['react', 'react-dom', 'swiper', 'framer-motion']
   }
 })
+

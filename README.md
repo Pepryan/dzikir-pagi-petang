@@ -9,6 +9,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Vite](https://img.shields.io/badge/Vite_6-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![PWA](https://img.shields.io/badge/PWA-Enabled-5A0FC8?style=flat&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
+[![Vitest](https://img.shields.io/badge/Vitest-4-6E9F18?style=flat&logo=vitest&logoColor=white)](https://vitest.dev/)
 
 Aplikasi web modern untuk dzikir pagi dan petang dengan antarmuka yang bersih dan ramah pengguna.
 
@@ -35,11 +36,24 @@ QS. Ar-Ra'd ayat 28
   - Pengalaman pengguna yang mulus di perangkat mobile
   - PWA (Progressive Web App) - dapat di-install sebagai aplikasi
 
+- 📖 **Pembaca Al-Quran**:
+  - Surah pilihan: Al-Mulk, Al-Kahfi, Yasin, Al-Waqiah
+  - Navigasi dengan swipe (mobile) atau arrow keys (desktop)
+  - Fitur jump-to-ayat untuk langsung ke ayat tertentu
+  - Bookmark otomatis - melanjutkan dari posisi terakhir
+  - Salin ayat ke clipboard
+  - Progress bar dengan indikator persentase
+
 - 🔄 **Fitur Pelacakan**: 
   - Progress bar visual untuk memantau kemajuan
   - Indikator navigasi yang intuitif
   - Penyimpanan progres otomatis
   - Mode penghitung (marker & counter)
+  - Statistik dan streak harian
+
+- 🤲 **Koleksi Doa**:
+  - Doa-doa harian pilihan
+  - Tampilan Arabic, Latin, dan terjemahan
 
 - 💾 **Penyimpanan Data**: 
   - Menyimpan kemajuan dzikir secara otomatis
@@ -57,6 +71,7 @@ QS. Ar-Ra'd ayat 28
 | [shadcn/ui](https://ui.shadcn.com/) | - | Komponen UI (Radix UI) |
 | [Framer Motion](https://www.framer.com/motion/) | 12.x | Animasi & Transisi |
 | [Swiper](https://swiperjs.com/) | 11.x | Gesture Swipe Navigation |
+| [Vitest](https://vitest.dev/) | 4.x | Unit Testing Framework |
 | [Lucide React](https://lucide.dev/) | - | Icon Library |
 | [Font Awesome](https://fontawesome.com/) | 6.x | Icon Library |
 
@@ -96,6 +111,8 @@ QS. Ar-Ra'd ayat 28
 | `npm run build` | Build production ke folder `dist/` |
 | `npm run preview` | Preview hasil build production |
 | `npm run lint` | Menjalankan ESLint untuk pengecekan kode |
+| `npm run test` | Menjalankan unit tests dengan Vitest (watch mode) |
+| `npm run test:run` | Menjalankan unit tests sekali |
 
 ## 📦 Build dan Deployment
 
@@ -126,13 +143,31 @@ dzikir-pagi-petang/
 │   ├── components/      # React components
 │   │   └── ui/          # shadcn/ui components
 │   ├── context/         # React context (DzikirContext)
-│   ├── data/            # Data dzikir (pagi & petang)
+│   ├── data/            # Data dzikir, doa, dan quran
+│   │   └── quran/       # Data surah (al-mulk, al-kahfi, yasin, al-waqiah)
 │   ├── lib/             # Utility functions
+│   ├── test/            # Test setup
 │   └── index.css        # Global styles & Tailwind config
 ├── index.html           # Entry HTML
-├── vite.config.js       # Vite configuration
+├── vite.config.js       # Vite & Vitest configuration
 └── tailwind.config.js   # Tailwind configuration
 ```
+
+## 🧪 Testing
+
+Aplikasi ini menggunakan Vitest untuk unit testing:
+
+```bash
+# Run tests in watch mode
+npm run test
+
+# Run tests once
+npm run test:run
+```
+
+Test coverage mencakup:
+- QuranReader component (navigation, completion state, jump-to-ayat, copy feature)
+- DzikirContext (bookmark/last read functionality)
 
 ## 🤝 Kontribusi
 
@@ -147,6 +182,7 @@ Berikut cara untuk berkontribusi:
 ### Panduan Kontribusi
 
 - Pastikan kode mengikuti standar format yang ada
+- Tambahkan unit tests untuk fitur baru
 - Tambahkan komentar untuk kode yang kompleks
 - Update dokumentasi jika diperlukan
 - Test perubahan sebelum membuat PR
@@ -171,6 +207,6 @@ Dibuat dengan ❤️ oleh Febryan Ramadhan untuk Umat Muslim.
 
 (Barakallahu fiikum - Semoga Allah memberkahimu)
 
-**v2.1.0** | Desember 2025
+**v3.1.0** | Desember 2025
 
 </div>
