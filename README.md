@@ -207,6 +207,6 @@ Dibuat dengan ❤️ oleh Febryan Ramadhan untuk Umat Muslim.
 
 (Barakallahu fiikum - Semoga Allah memberkahimu)
 
-**v3.1.0** | Desember 2025
+**v3.1.1** | Desember 2025
 
 </div>

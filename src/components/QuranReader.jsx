@@ -276,7 +276,7 @@ const QuranReader = ({ surah }) => {
 
             {/* Ayat Content - Swipeable area with Desktop Navigation */}
             <div
-                className="flex-1 flex items-center justify-center overflow-y-auto px-2 relative touch-pan-y"
+                className="flex-1 min-h-0 overflow-y-auto px-2 relative touch-pan-y"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
@@ -342,7 +342,7 @@ const QuranReader = ({ surah }) => {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         transition={{ duration: 0.2 }}
-                        className="text-center max-w-2xl mx-auto px-10 md:px-20"
+                        className="text-center max-w-2xl mx-auto px-6 md:px-20 py-4"
                     >
                         {/* Arabic Text */}
                         <p

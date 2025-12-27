@@ -3,7 +3,7 @@ import dzikirData from '../data/dzikir';
 import { recordCompletion, getStatsSummary } from '../data/statsData';
 
 // App version - update this for new releases
-const APP_VERSION = '3.1.0';
+const APP_VERSION = '3.1.1';
 
 // Function to check if localStorage is available and working
 const isLocalStorageAvailable = () => {
