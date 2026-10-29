@@ -8,12 +8,37 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { useDzikir } from "@/context/DzikirContext";
+import { useDzikir, DEFAULT_SETTINGS } from "@/context/DzikirContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle, faDownload, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { useRef, useState } from "react";
+import { downloadBackup, restoreBackup } from "@/lib/backup";
 
 const SettingsDialog = ({ open, onOpenChange, openAbout }) => {
   const { settings, updateSettings } = useDzikir();
+  const importInputRef = useRef(null);
+  const [backupMessage, setBackupMessage] = useState(null);
+
+  const handleImport = async (e) => {
+    const file = e.target.files[0];
+    e.target.value = ''; // allow picking the same file again
+    if (!file) return;
+    if (!window.confirm('Data statistik, pengaturan, progress Al-Quran, dan doa favorit akan diganti dengan isi file cadangan. Lanjutkan?')) return;
+
+    try {
+      const restored = restoreBackup(JSON.parse(await file.text()));
+      // Apply imported settings to the running app too, otherwise the next auto-save would overwrite them
+      if (restored.dzikirSettings) {
+        const importedSettings = { ...restored.dzikirSettings };
+        delete importedSettings.version; // keep the running app's version
+        updateSettings(importedSettings);
+      }
+      setBackupMessage('✅ Data berhasil dipulihkan');
+    } catch (error) {
+      console.error('Error importing backup:', error);
+      setBackupMessage('❌ File cadangan tidak valid');
+    }
+  };
 
   const handleSwitchChange = (key) => {
     updateSettings({ [key]: !settings[key] });
@@ -268,6 +293,20 @@ const SettingsDialog = ({ open, onOpenChange, openAbout }) => {
             <div className="space-y-2">
               <h3 className="font-medium text-lg">Navigasi</h3>
 
+              <div className="flex items-center justify-between gap-4">
+                <label htmlFor="auto-tab-by-time" className="text-sm">
+                  Pilih Pagi/Petang Otomatis Sesuai Jam
+                  <span className="block text-xs text-gray-500 dark:text-gray-400">
+                    Pagi 03.00–14.59, Petang 15.00–02.59
+                  </span>
+                </label>
+                <Switch
+                  id="auto-tab-by-time"
+                  checked={settings.autoTabByTime}
+                  onCheckedChange={() => handleSwitchChange('autoTabByTime')}
+                />
+              </div>
+
               <div className="flex items-center justify-between">
                 <label htmlFor="auto-next" className="text-sm">
                   Otomatis ke Dzikir Berikutnya
@@ -282,21 +321,39 @@ const SettingsDialog = ({ open, onOpenChange, openAbout }) => {
           </div>
         </div>
 
+        <div className="space-y-2">
+          <h3 className="font-medium text-lg">Data & Cadangan</h3>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Simpan statistik, pengaturan, progress Al-Quran, dan doa favorit ke file, lalu pulihkan di perangkat lain.
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="outline" onClick={() => { downloadBackup(); setBackupMessage(null); }}>
+              <FontAwesomeIcon icon={faDownload} className="mr-2" />
+              Ekspor Data
+            </Button>
+            <Button variant="outline" onClick={() => importInputRef.current?.click()}>
+              <FontAwesomeIcon icon={faUpload} className="mr-2" />
+              Impor Data
+            </Button>
+          </div>
+          <input
+            ref={importInputRef}
+            type="file"
+            accept="application/json,.json"
+            onChange={handleImport}
+            className="hidden"
+            aria-label="Pilih file cadangan"
+          />
+          {backupMessage && <p className="text-sm">{backupMessage}</p>}
+        </div>
+
         <DialogFooter className="flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-2">
           {/* Reset Settings Button */}
           <Button
             variant="outline"
             onClick={() => {
               if (window.confirm('Apakah Anda yakin ingin mengembalikan pengaturan ke default?')) {
-                updateSettings({
-                  theme: 'light',
-                  showTranslation: true,
-                  showLatin: true,
-                  showSource: true,
-                  arabicFont: 'Noto Naskh Arabic',
-                  arabicFontSize: 28,
-                  countingMethod: 'marker'
-                });
+                updateSettings(DEFAULT_SETTINGS);
               }
             }}
             className="w-full sm:w-auto"

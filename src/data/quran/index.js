@@ -31,7 +31,7 @@ export const surahList = [
         nameArabic: 'الكهف',
         meaning: 'Gua',
         totalAyat: 110,
-        displayAyat: 110, // Lengkap
+        displayAyat: 20, // Ayat pilihan 1-10 dan 101-110
         type: 'Makkiyah',
         description: 'Surat yang disunnahkan dibaca setiap hari Jumat. Membaca 10 ayat pertama memberikan perlindungan dari fitnah Dajjal.',
         recommendedTime: 'Hari Jumat',

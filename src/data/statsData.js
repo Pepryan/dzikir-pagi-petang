@@ -3,20 +3,14 @@
 
 const STATS_KEY = 'dzikirStats';
 
-// Format tanggal ke YYYY-MM-DD
+// Format tanggal ke YYYY-MM-DD (waktu lokal, bukan UTC)
 const formatDate = (date) => {
-    return date.toISOString().split('T')[0];
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 };
 
 // Get today's date in YYYY-MM-DD format
-const getToday = () => formatDate(new Date());
-
-// Get yesterday's date in YYYY-MM-DD format
-const getYesterday = () => {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    return formatDate(yesterday);
-};
+export const getToday = () => formatDate(new Date());
 
 // Initialize default stats structure
 const getDefaultStats = () => ({
@@ -64,6 +58,11 @@ export const recordCompletion = (type) => {
         stats.history[today] = { pagi: false, petang: false };
     }
 
+    // Already recorded today (e.g. unmarked and re-marked): don't count it twice
+    if (stats.history[today][type]) {
+        return stats;
+    }
+
     // Mark the type as completed
     if (type === 'pagi') {
         stats.lastPagiDate = today;
@@ -96,12 +95,9 @@ const calculateStreak = (history) => {
     let streak = 0;
     let currentDate = new Date();
 
-    // Check if today has any completion
+    // If no completion today (yet), start counting from yesterday
     const today = formatDate(currentDate);
-    if (history[today] && (history[today].pagi || history[today].petang)) {
-        streak = 1;
-    } else {
-        // If no completion today, start from yesterday
+    if (!history[today] || !(history[today].pagi || history[today].petang)) {
         currentDate.setDate(currentDate.getDate() - 1);
     }
 
@@ -112,8 +108,7 @@ const calculateStreak = (history) => {
 
         // A day counts if at least one dzikir (pagi or petang) was completed
         if (dayHistory && (dayHistory.pagi || dayHistory.petang)) {
-            if (streak === 0) streak = 1;
-            else streak++;
+            streak++;
         } else {
             break;
         }
@@ -148,6 +143,29 @@ export const getLast7Days = () => {
     return days;
 };
 
+// Get every day of a month (month is 0-based) for the calendar view.
+// offset = number of empty cells before day 1, with weeks starting on Monday.
+export const getMonthDays = (year, month) => {
+    const stats = loadStats();
+    const today = getToday();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const days = [];
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = formatDate(new Date(year, month, day));
+        days.push({
+            date: dateStr,
+            dayNum: day,
+            pagi: stats.history[dateStr]?.pagi || false,
+            petang: stats.history[dateStr]?.petang || false,
+            isToday: dateStr === today,
+            isFuture: dateStr > today
+        });
+    }
+
+    return { days, offset: (new Date(year, month, 1).getDay() + 6) % 7 };
+};
+
 // Check and award badges
 const checkBadges = (stats) => {
     const badges = [...(stats.badges || [])];
@@ -180,7 +198,8 @@ const checkBadges = (stats) => {
 export const getStatsSummary = () => {
     const stats = loadStats();
     return {
-        streak: stats.streak,
+        // Recompute so a missed day breaks the streak even without a new completion
+        streak: calculateStreak(stats.history),
         longestStreak: stats.longestStreak,
         totalSessions: stats.totalSessions,
         badges: stats.badges || [],
@@ -200,6 +219,7 @@ export default {
     saveStats,
     recordCompletion,
     getLast7Days,
+    getMonthDays,
     getStatsSummary,
     resetStats
 };

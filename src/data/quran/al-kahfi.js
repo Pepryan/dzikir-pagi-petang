@@ -117,7 +117,7 @@ const alKahfi = {
             number: 107,
             arabic: "اِنَّ الَّذِيْنَ اٰمَنُوْا وَعَمِلُوا الصّٰلِحٰتِ كَانَتْ لَهُمْ جَنّٰتُ الْفِرْدَوْسِ نُزُلًاۙ",
             latin: "Innalladziina aamanuu wa'amilush shaalihaati kaanat lahum jannaatul firdausi nuzulaa",
-            translation: "Sungguh, orang-orang yang beriman dan mengerjakan kebajikan, destinasi mereka adalah surga Firdaus."
+            translation: "Sungguh, orang yang beriman dan mengerjakan kebajikan, untuk mereka disediakan surga Firdaus sebagai tempat tinggal."
         },
         {
             number: 108,

@@ -38,7 +38,7 @@ describe('QuranReader', () => {
         it('should render surah header correctly', () => {
             renderWithProvider(<QuranReader surah={mockSurah} />);
 
-            expect(screen.getByText('Al-Waqiah')).toBeInTheDocument();
+            expect(screen.getByText('الواقعة')).toBeInTheDocument();
             expect(screen.getByText(/Hari Kiamat/)).toBeInTheDocument();
         });
 
@@ -164,6 +164,23 @@ describe('QuranReader', () => {
                 expect(screen.getByText(/خَافِضَةٌ رَّافِعَةٌ/)).toBeInTheDocument();
             });
         });
+
+        it('should jump by ayat number in surahs with selected (non-contiguous) ayat', async () => {
+            const selectedSurah = {
+                ...mockSurah,
+                ayat: [mockSurah.ayat[0], mockSurah.ayat[1], { ...mockSurah.ayat[2], number: 101 }]
+            };
+            renderWithProvider(<QuranReader surah={selectedSurah} />);
+
+            fireEvent.click(screen.getByText('Ayat 1'));
+            const input = screen.getByPlaceholderText('1 - 101');
+            fireEvent.change(input, { target: { value: '101' } });
+            fireEvent.click(screen.getByText('Pergi'));
+
+            await waitFor(() => {
+                expect(screen.getByText('Ayat 101')).toBeInTheDocument();
+            });
+        });
     });
 
     describe('Copy Feature', () => {
@@ -183,6 +200,25 @@ describe('QuranReader', () => {
             await waitFor(() => {
                 expect(navigator.clipboard.writeText).toHaveBeenCalled();
             });
+        });
+    });
+
+    describe('Share Feature', () => {
+        it('should show a single share button when native sharing is supported', async () => {
+            navigator.share = vi.fn().mockResolvedValue(undefined);
+            try {
+                renderWithProvider(<QuranReader surah={mockSurah} />);
+
+                expect(screen.queryByText('Salin Ayat')).not.toBeInTheDocument();
+                fireEvent.click(screen.getByText('Bagikan Ayat'));
+
+                await waitFor(() => {
+                    expect(navigator.share).toHaveBeenCalled();
+                });
+                expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
+            } finally {
+                delete navigator.share;
+            }
         });
     });
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { DzikirProvider, useDzikir } from './context/DzikirContext';
+import { DzikirProvider } from './context/DzikirContext';
 import Header from './components/Header';
 import DzikirCarousel from './components/DzikirCarousel';
 import BottomNav from './components/BottomNav';
@@ -36,13 +36,17 @@ function AppContent() {
 
     fontLinks.forEach(link => document.head.appendChild(link));
 
+    // Don't block the app when fonts fail or are slow (e.g. offline): fall back after 3s
+    const fallbackTimer = setTimeout(() => setFontsLoaded(true), 3000);
     Promise.all(fontLinks.map(link => {
       return new Promise((resolve) => {
         link.onload = resolve;
+        link.onerror = resolve;
       });
     })).then(() => setFontsLoaded(true));
 
     return () => {
+      clearTimeout(fallbackTimer);
       fontLinks.forEach(link => document.head.removeChild(link));
     };
   }, []);

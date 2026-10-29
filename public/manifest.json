@@ -2,8 +2,8 @@
   "name": "Daily Dzikr - Dzikir Pagi & Petang",
   "short_name": "Daily Dzikr",
   "description": "Aplikasi dzikir pagi dan petang digital untuk memudahkan umat Muslim dalam mengamalkan dzikir sesuai sunnah. Fitur lengkap dengan terjemahan, latin, dan penghitung otomatis.",
-  "start_url": "/dzikir-pagi-petang/",
-  "scope": "/dzikir-pagi-petang/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "display_override": [
     "window-controls-overlay",
@@ -32,10 +32,10 @@
       "name": "Dzikir Pagi",
       "short_name": "Pagi",
       "description": "Buka dzikir pagi",
-      "url": "/dzikir-pagi-petang/?tab=pagi",
+      "url": "/?tab=pagi",
       "icons": [
         {
-          "src": "moon.svg",
+          "src": "/moon.svg",
           "sizes": "any",
           "type": "image/svg+xml"
         }
@@ -45,10 +45,10 @@
       "name": "Dzikir Petang",
       "short_name": "Petang",
       "description": "Buka dzikir petang",
-      "url": "/dzikir-pagi-petang/?tab=petang",
+      "url": "/?tab=petang",
       "icons": [
         {
-          "src": "moon.svg",
+          "src": "/moon.svg",
           "sizes": "any",
           "type": "image/svg+xml"
         }
@@ -57,7 +57,7 @@
   ],
   "icons": [
     {
-      "src": "moon.svg",
+      "src": "/moon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"

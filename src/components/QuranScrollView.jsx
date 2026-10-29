@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { useDzikir } from "@/context/DzikirContext";
+import { faCopy, faCheck, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { canShare } from "@/lib/share";
 
 /**
  * Scroll View component for Quran Reader
@@ -13,7 +13,7 @@ const QuranScrollView = ({
     arabicEndRef,
     getFontFamily,
     toArabicNumber,
-    handleCopy,
+    handleShare,
     settings
 }) => {
     return (
@@ -51,6 +51,16 @@ const QuranScrollView = ({
                 >
                     {ayatList.map((ayat, index) => (
                         <span key={ayat.number}>
+                            {/* Selected-ayat surahs (e.g. Al-Kahfi) skip a range: mark the gap */}
+                            {index > 0 && ayat.number !== ayatList[index - 1].number + 1 && (
+                                <span
+                                    className="block text-center text-sm text-amber-600 dark:text-amber-400 my-4"
+                                    style={{ fontSize: '0.875rem', lineHeight: 1.5, wordSpacing: 'normal' }}
+                                    dir="ltr"
+                                >
+                                    ⋯ Ayat {ayatList[index - 1].number + 1}–{ayat.number - 1} tidak ditampilkan ⋯
+                                </span>
+                            )}
                             {ayat.arabic}
                             <span className="inline-block mx-1 text-primary-500 ayat-number-inline">
                                 ﴿{toArabicNumber(ayat.number)}﴾
@@ -92,11 +102,12 @@ const QuranScrollView = ({
                                 )}
                             </div>
                             <button
-                                onClick={(e) => handleCopy(e, ayat)}
+                                onClick={(e) => handleShare(e, ayat)}
                                 className="flex-shrink-0 p-2 text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors"
-                                title="Salin ayat ini"
+                                title={canShare() ? 'Bagikan ayat ini' : 'Salin ayat ini'}
+                                aria-label={canShare() ? 'Bagikan ayat ini' : 'Salin ayat ini'}
                             >
-                                <FontAwesomeIcon icon={faCopy} className="text-sm" />
+                                <FontAwesomeIcon icon={canShare() ? faShareNodes : faCopy} className="text-sm" />
                             </button>
                         </div>
                     </div>

@@ -5,8 +5,11 @@ import {
     DialogTitle,
     DialogDescription,
 } from "@/components/ui/dialog";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { getLast7Days, getStatsSummary } from "@/data/statsData";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { getLast7Days, getMonthDays, getStatsSummary } from "@/data/statsData";
 
 const StatsDialog = ({ open, onOpenChange }) => {
     const stats = getStatsSummary();
@@ -97,6 +100,9 @@ const StatsDialog = ({ open, onOpenChange }) => {
                         </div>
                     </div>
 
+                    {/* Monthly Calendar */}
+                    <MonthCalendar />
+
                     {/* Total Sessions */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="text-center p-4 rounded-xl bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800">
@@ -155,6 +161,89 @@ const StatsDialog = ({ open, onOpenChange }) => {
                 </div>
             </DialogContent>
         </Dialog>
+    );
+};
+
+const WEEKDAYS = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
+
+const MonthCalendar = () => {
+    const now = new Date();
+    const [viewDate, setViewDate] = useState({ year: now.getFullYear(), month: now.getMonth() });
+    const { days, offset } = getMonthDays(viewDate.year, viewDate.month);
+    const isCurrentMonth = viewDate.year === now.getFullYear() && viewDate.month === now.getMonth();
+    const monthLabel = new Date(viewDate.year, viewDate.month, 1)
+        .toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+    const pagiCount = days.filter(day => day.pagi).length;
+    const petangCount = days.filter(day => day.petang).length;
+
+    const changeMonth = (delta) => {
+        const date = new Date(viewDate.year, viewDate.month + delta, 1);
+        setViewDate({ year: date.getFullYear(), month: date.getMonth() });
+    };
+
+    return (
+        <div className="space-y-3">
+            <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-gray-800 dark:text-gray-200">
+                    🗓️ Riwayat Bulanan
+                </h3>
+                <div className="flex items-center gap-1">
+                    <button
+                        onClick={() => changeMonth(-1)}
+                        className="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300"
+                        aria-label="Bulan sebelumnya"
+                    >
+                        <FontAwesomeIcon icon={faChevronLeft} className="text-xs" />
+                    </button>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300 w-32 text-center">
+                        {monthLabel}
+                    </span>
+                    <button
+                        onClick={() => changeMonth(1)}
+                        disabled={isCurrentMonth}
+                        className="w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 disabled:opacity-30 disabled:hover:bg-transparent"
+                        aria-label="Bulan berikutnya"
+                    >
+                        <FontAwesomeIcon icon={faChevronRight} className="text-xs" />
+                    </button>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-7 gap-1 text-center">
+                {WEEKDAYS.map(name => (
+                    <div key={name} className="text-xs text-gray-500 dark:text-gray-400 pb-1">{name}</div>
+                ))}
+                {Array.from({ length: offset }).map((_, i) => <div key={`empty-${i}`} />)}
+                {days.map(day => (
+                    <div
+                        key={day.date}
+                        className={`aspect-square rounded-lg flex flex-col items-center justify-center text-xs ${day.pagi && day.petang
+                            ? 'bg-emerald-500 text-white font-semibold'
+                            : day.pagi || day.petang
+                                ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300'
+                                : day.isFuture
+                                    ? 'text-gray-300 dark:text-gray-600'
+                                    : 'bg-gray-50 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400'
+                            } ${day.isToday ? 'ring-2 ring-sky-500 dark:ring-sky-400' : ''}`}
+                        title={`${day.date}${day.pagi ? ' · Pagi ✓' : ''}${day.petang ? ' · Petang ✓' : ''}`}
+                    >
+                        <span>{day.dayNum}</span>
+                        <span className="flex gap-0.5 h-1.5 mt-0.5">
+                            {day.pagi && <span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />}
+                            {day.petang && <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />}
+                        </span>
+                    </div>
+                ))}
+            </div>
+
+            <div className="flex justify-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                <span>☀️ {pagiCount} hari pagi</span>
+                <span>🌙 {petangCount} hari petang</span>
+                <span className="flex items-center gap-1">
+                    <span className="w-3 h-3 rounded bg-emerald-500"></span> Keduanya
+                </span>
+            </div>
+        </div>
     );
 };
 

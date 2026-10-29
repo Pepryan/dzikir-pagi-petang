@@ -9,7 +9,6 @@ function verifyThemeBeforeRender() {
   try {
     // Check what theme is currently applied to the document
     const isDarkMode = document.documentElement.classList.contains('dark');
-    const currentTheme = isDarkMode ? 'dark' : 'light';
     // Check what theme should be applied according to localStorage
     const savedSettings = localStorage.getItem('dzikirSettings');
     if (savedSettings) {

@@ -1,7 +1,29 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import dzikirData from '../data/dzikir';
-import { recordCompletion, getStatsSummary } from '../data/statsData';
+import { recordCompletion, getStatsSummary, getToday } from '../data/statsData';
 import { version as APP_VERSION } from '../../package.json';
+
+export const DEFAULT_SETTINGS = {
+  countingMethod: 'marker',
+  showTranslation: true,
+  showLatin: true,
+  showSource: true,
+  autoNext: false,
+  showSwipeIndicator: true,
+  arabicFont: 'Noto Naskh Arabic',
+  arabicFontSize: 28,
+  quranViewMode: 'page', // 'page' or 'scroll'
+  autoTabByTime: true,
+};
+
+// Pagi from 03:00 until before Ashar (~15:00), petang from 15:00 onwards
+const getTabForTime = (date = new Date()) => {
+  const hour = date.getHours();
+  return hour >= 3 && hour < 15 ? 'pagi' : 'petang';
+};
+
+// Leaving the app in the background longer than this re-picks the tab by time
+const AUTO_TAB_IDLE_MS = 30 * 60 * 1000;
 
 // Function to check if localStorage is available and working
 const isLocalStorageAvailable = () => {
@@ -16,6 +38,41 @@ const isLocalStorageAvailable = () => {
   }
 };
 
+// Quran bookmark/last read functions (module scope so references stay stable)
+const saveQuranProgress = (surahId, ayatIndex) => {
+  if (!isLocalStorageAvailable()) return;
+  try {
+    const quranProgress = JSON.parse(localStorage.getItem('quranProgress') || '{}');
+    quranProgress[surahId] = {
+      ayatIndex,
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('quranProgress', JSON.stringify(quranProgress));
+  } catch (error) {
+    console.error('Error saving Quran progress:', error);
+  }
+};
+
+const getQuranProgress = (surahId) => {
+  if (!isLocalStorageAvailable()) return null;
+  try {
+    const quranProgress = JSON.parse(localStorage.getItem('quranProgress') || '{}');
+    return quranProgress[surahId] || null;
+  } catch (error) {
+    console.error('Error getting Quran progress:', error);
+    return null;
+  }
+};
+
+// Saves all app state to localStorage
+const saveAllData = ({ settings, data, progressDate, currentTab, currentDzikirIndex }) => {
+  localStorage.setItem('dzikirSettings', JSON.stringify(settings));
+  localStorage.setItem('dzikirProgress', JSON.stringify(data));
+  localStorage.setItem('dzikirProgressDate', progressDate);
+  localStorage.setItem('dzikirCurrentTab', currentTab);
+  localStorage.setItem('dzikirCurrentIndex', currentDzikirIndex.toString());
+};
+
 const DzikirContext = createContext();
 
 export const useDzikir = () => useContext(DzikirContext);
@@ -26,58 +83,23 @@ export const DzikirProvider = ({ children }) => {
 
   // Function to get initial settings from localStorage
   const getInitialSettings = () => {
+    // Always use version from code, not from localStorage (prevents stale version display)
+    const defaults = { ...DEFAULT_SETTINGS, theme: initialTheme, version: APP_VERSION };
     if (!isLocalStorageAvailable()) {
-      return {
-        theme: initialTheme,
-        countingMethod: 'marker',
-        showTranslation: true,
-        showLatin: true,
-        showSource: true,
-        autoNext: false,
-        showSwipeIndicator: true,
-        quranViewMode: 'page', // 'page' or 'scroll'
-        version: APP_VERSION
-      };
+      return defaults;
     }
 
     try {
       const savedSettings = localStorage.getItem('dzikirSettings');
       if (savedSettings) {
-        const parsedSettings = JSON.parse(savedSettings);
-        // Ensure all required settings exist with defaults if missing
-        const defaultSettings = {
-          theme: initialTheme,
-          countingMethod: 'marker',
-          showTranslation: true,
-          showLatin: true,
-          showSource: true,
-          autoNext: false,
-          showSwipeIndicator: true,
-          quranViewMode: 'page',
-          version: APP_VERSION
-        };
-        // Create a complete settings object with defaults for any missing properties
-        // Always use version from code, not from localStorage (prevents stale version display)
-        return { ...defaultSettings, ...parsedSettings, version: APP_VERSION };
+        // Fill in defaults for any settings missing from older saved versions
+        return { ...defaults, ...JSON.parse(savedSettings), version: APP_VERSION };
       }
     } catch (error) {
       console.error('Error loading initial settings:', error);
     }
 
-    // Return defaults if no saved settings or error
-    return {
-      theme: initialTheme,
-      countingMethod: 'marker',
-      showTranslation: true,
-      showLatin: true,
-      showSource: true,
-      autoNext: false,
-      showSwipeIndicator: true,
-      arabicFont: 'Noto Naskh Arabic',
-      arabicFontSize: 28,
-      quranViewMode: 'page',
-      version: APP_VERSION
-    };
+    return defaults;
   };
 
   // Function to get initial data from localStorage
@@ -87,7 +109,10 @@ export const DzikirProvider = ({ children }) => {
     }
 
     try {
-      const savedProgress = localStorage.getItem('dzikirProgress');
+      // Progress is per day: start fresh when the saved progress is from an earlier day
+      const savedProgress = localStorage.getItem('dzikirProgressDate') === getToday()
+        ? localStorage.getItem('dzikirProgress')
+        : null;
       if (savedProgress) {
         const parsedProgress = JSON.parse(savedProgress);
         // Check if the parsed data has the expected structure
@@ -124,7 +149,17 @@ export const DzikirProvider = ({ children }) => {
   };
 
   // Function to get initial tab from localStorage
-  const getInitialTab = () => {
+  const getInitialTab = (autoTabByTime) => {
+    // PWA shortcuts open the app with ?tab=pagi or ?tab=petang
+    const urlTab = new URLSearchParams(window.location.search).get('tab');
+    if (urlTab === 'pagi' || urlTab === 'petang') {
+      return urlTab;
+    }
+
+    if (autoTabByTime) {
+      return getTabForTime();
+    }
+
     if (!isLocalStorageAvailable()) {
       return 'pagi';
     }
@@ -142,15 +177,15 @@ export const DzikirProvider = ({ children }) => {
   };
 
   // Function to get initial index from localStorage
-  const getInitialIndex = () => {
-    if (!isLocalStorageAvailable()) {
+  const getInitialIndex = (tab) => {
+    if (!isLocalStorageAvailable() || tab !== localStorage.getItem('dzikirCurrentTab')) {
       return 0;
     }
 
     try {
-      const savedIndex = localStorage.getItem('dzikirCurrentIndex');
-      if (savedIndex && !isNaN(parseInt(savedIndex))) {
-        return parseInt(savedIndex);
+      const savedIndex = parseInt(localStorage.getItem('dzikirCurrentIndex'));
+      if (savedIndex >= 0 && savedIndex < dzikirData[tab].length) {
+        return savedIndex;
       }
     } catch (error) {
       console.error('Error loading initial index:', error);
@@ -160,20 +195,44 @@ export const DzikirProvider = ({ children }) => {
   };
 
   // Initialize state with values from localStorage
-  const [currentTab, setCurrentTab] = useState(getInitialTab());
-  const [currentDzikirIndex, setCurrentDzikirIndex] = useState(getInitialIndex());
-  const [settings, setSettings] = useState(getInitialSettings());
-  const [data, setData] = useState(getInitialData());
+  const [settings, setSettings] = useState(getInitialSettings);
+  const [currentTab, setCurrentTab] = useState(() => getInitialTab(settings.autoTabByTime));
+  const [currentDzikirIndex, setCurrentDzikirIndex] = useState(() => getInitialIndex(currentTab));
+  const hiddenAtRef = useRef(null);
+  const [data, setData] = useState(getInitialData);
+  const [progressDate, setProgressDate] = useState(getToday);
+
+  // When the app comes back from the background (e.g. PWA left open):
+  // reset progress on a new day, and re-pick pagi/petang after a long break
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        hiddenAtRef.current = Date.now();
+        return;
+      }
+
+      if (progressDate !== getToday()) {
+        setData(JSON.parse(JSON.stringify(dzikirData)));
+        setProgressDate(getToday());
+        setCurrentDzikirIndex(0);
+      }
+
+      const idleTooLong = hiddenAtRef.current && Date.now() - hiddenAtRef.current >= AUTO_TAB_IDLE_MS;
+      if (settings.autoTabByTime && idleTooLong && getTabForTime() !== currentTab) {
+        setCurrentTab(getTabForTime());
+        setCurrentDzikirIndex(0);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [progressDate, settings.autoTabByTime, currentTab]);
 
   // Periodically save all data as a backup
   useEffect(() => {
     const saveInterval = setInterval(() => {
       if (isLocalStorageAvailable()) {
         try {
-          localStorage.setItem('dzikirSettings', JSON.stringify(settings));
-          localStorage.setItem('dzikirProgress', JSON.stringify(data));
-          localStorage.setItem('dzikirCurrentTab', currentTab);
-          localStorage.setItem('dzikirCurrentIndex', currentDzikirIndex.toString());
+          saveAllData({ settings, data, progressDate, currentTab, currentDzikirIndex });
         } catch (error) {
           console.error('Error during periodic save:', error);
         }
@@ -181,41 +240,35 @@ export const DzikirProvider = ({ children }) => {
     }, 30000); // Every 30 seconds
 
     return () => clearInterval(saveInterval);
-  }, [settings, data, currentTab, currentDzikirIndex]);
+  }, [settings, data, progressDate, currentTab, currentDzikirIndex]);
 
   // Save data when user leaves the page
   useEffect(() => {
-    const saveAllData = () => {
+    const saveBeforeLeave = () => {
       if (isLocalStorageAvailable()) {
         try {
-          localStorage.setItem('dzikirSettings', JSON.stringify(settings));
-          localStorage.setItem('dzikirProgress', JSON.stringify(data));
-          localStorage.setItem('dzikirCurrentTab', currentTab);
-          localStorage.setItem('dzikirCurrentIndex', currentDzikirIndex.toString());
+          saveAllData({ settings, data, progressDate, currentTab, currentDzikirIndex });
         } catch (error) {
           console.error('Error saving data before unload:', error);
         }
       }
     };
 
-    const handleBeforeUnload = () => saveAllData();
+    const handleBeforeUnload = () => saveBeforeLeave();
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      saveAllData(); // Also save when component unmounts
+      saveBeforeLeave(); // Also save when component unmounts
     };
-  }, [settings, data, currentTab, currentDzikirIndex]);
+  }, [settings, data, progressDate, currentTab, currentDzikirIndex]);
 
   // Save all data when any state changes
   useEffect(() => {
     const saveTimeout = setTimeout(() => {
       if (isLocalStorageAvailable()) {
         try {
-          localStorage.setItem('dzikirSettings', JSON.stringify(settings));
-          localStorage.setItem('dzikirProgress', JSON.stringify(data));
-          localStorage.setItem('dzikirCurrentTab', currentTab);
-          localStorage.setItem('dzikirCurrentIndex', currentDzikirIndex.toString());
+          saveAllData({ settings, data, progressDate, currentTab, currentDzikirIndex });
         } catch (error) {
           console.error('Error saving data after state change:', error);
         }
@@ -223,7 +276,7 @@ export const DzikirProvider = ({ children }) => {
     }, 300); // Shorter debounce for responsiveness
 
     return () => clearTimeout(saveTimeout);
-  }, [settings, data, currentTab, currentDzikirIndex]);
+  }, [settings, data, progressDate, currentTab, currentDzikirIndex]);
 
   // Apply theme based on settings
   useEffect(() => {
@@ -299,32 +352,6 @@ export const DzikirProvider = ({ children }) => {
   // Get current stats summary
   const getStats = () => {
     return getStatsSummary();
-  };
-
-  // Quran bookmark/last read functions
-  const saveQuranProgress = (surahId, ayatIndex) => {
-    if (!isLocalStorageAvailable()) return;
-    try {
-      const quranProgress = JSON.parse(localStorage.getItem('quranProgress') || '{}');
-      quranProgress[surahId] = {
-        ayatIndex,
-        timestamp: new Date().toISOString()
-      };
-      localStorage.setItem('quranProgress', JSON.stringify(quranProgress));
-    } catch (error) {
-      console.error('Error saving Quran progress:', error);
-    }
-  };
-
-  const getQuranProgress = (surahId) => {
-    if (!isLocalStorageAvailable()) return null;
-    try {
-      const quranProgress = JSON.parse(localStorage.getItem('quranProgress') || '{}');
-      return quranProgress[surahId] || null;
-    } catch (error) {
-      console.error('Error getting Quran progress:', error);
-      return null;
-    }
   };
 
   return (

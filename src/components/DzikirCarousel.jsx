@@ -14,11 +14,8 @@ import {
   faCheck,
   faPlus,
   faMinus,
-  faCheckCircle,
   faCircleCheck,
-  faHandPointUp,
-  faBookmark,
-  faCircleXmark
+  faBookmark
 } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -41,13 +38,6 @@ const DzikirCarousel = () => {
       swiper.slideTo(currentDzikirIndex);
     }
   }, [currentDzikirIndex, swiper]);
-
-  // Update swiper when tab changes
-  useEffect(() => {
-    if (swiper) {
-      swiper.slideTo(0);
-    }
-  }, [currentTab, swiper]);
 
   // Handle slide change
   const handleSlideChange = (swiper) => {
@@ -90,7 +80,7 @@ const DzikirCarousel = () => {
   const handleMarkClick = () => {
     if (!currentDzikir) return;
 
-    const wasComplete = currentDzikir.counter > 0;
+    const wasComplete = isComplete;
     const newValue = wasComplete ? 0 : currentDzikir.count;
 
     // Toggle between 0 and full count
@@ -192,6 +182,7 @@ const DzikirCarousel = () => {
           lastSlideMessage: 'Dzikir terakhir',
           paginationBulletMessage: 'Pergi ke dzikir {{index}}',
         }}
+        initialSlide={currentDzikirIndex}
         onSwiper={setSwiper}
         onSlideChange={handleSlideChange}
         className="w-full h-full mt-4"
@@ -200,7 +191,11 @@ const DzikirCarousel = () => {
       >
         {dzikirList.map((dzikir, index) => (
           <SwiperSlide key={dzikir.id} className="px-2 py-2">
-            <DzikirCard dzikir={dzikir} index={index} />
+            <DzikirCard
+              dzikir={dzikir}
+              index={index}
+              onTap={settings.countingMethod === 'counter' && index === currentDzikirIndex ? handleIncrementClick : undefined}
+            />
           </SwiperSlide>
         ))}
       </Swiper>

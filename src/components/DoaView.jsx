@@ -1,19 +1,54 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandsPraying, faArrowLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faHandsPraying, faArrowLeft, faChevronRight, faStar, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDzikir } from "@/context/DzikirContext";
+import ShareButton from "./ShareButton";
+import { formatEntry } from "@/lib/share";
 import doaData from '@/data/doa';
+
+const FAVORITES_KEY = 'doaFavorites';
+
+const loadFavorites = () => {
+    try {
+        const saved = JSON.parse(localStorage.getItem(FAVORITES_KEY));
+        return Array.isArray(saved) ? saved : [];
+    } catch {
+        return [];
+    }
+};
 
 const DoaView = () => {
     const [selectedDoa, setSelectedDoa] = useState(null);
+    const [query, setQuery] = useState('');
+    const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+    const [favorites, setFavorites] = useState(loadFavorites);
     const { settings } = useDzikir();
 
-    const doaList = doaData.harian || [];
+    const allDoa = doaData.harian || [];
+    const normalizedQuery = query.trim().toLowerCase();
+    const doaList = allDoa
+        .filter(doa => !showFavoritesOnly || favorites.includes(doa.id))
+        .filter(doa => !normalizedQuery || [doa.title, doa.latin, doa.translation]
+            .some(text => text.toLowerCase().includes(normalizedQuery)))
+        // Favorites first, otherwise keep the original order
+        .sort((a, b) => favorites.includes(b.id) - favorites.includes(a.id));
 
-    const handleSelectDoa = (index) => {
-        setSelectedDoa(doaList[index]);
+    const toggleFavorite = (id) => {
+        const updated = favorites.includes(id)
+            ? favorites.filter(favId => favId !== id)
+            : [...favorites, id];
+        setFavorites(updated);
+        try {
+            localStorage.setItem(FAVORITES_KEY, JSON.stringify(updated));
+        } catch (error) {
+            console.error('Error saving doa favorites:', error);
+        }
+    };
+
+    const handleSelectDoa = (doa) => {
+        setSelectedDoa(doa);
     };
 
     const handleBack = () => {
@@ -64,12 +99,18 @@ const DoaView = () => {
                             <FontAwesomeIcon icon={faArrowLeft} />
                         </Button>
                     )}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
                         <FontAwesomeIcon icon={faHandsPraying} className="text-amber-500 text-xl" />
-                        <h1 className="text-xl font-bold text-gray-800 dark:text-white">
+                        <h1 className="text-xl font-bold text-gray-800 dark:text-white truncate">
                             {selectedDoa ? selectedDoa.title : 'Doa Harian'}
                         </h1>
                     </div>
+                    {selectedDoa && (
+                        <FavoriteButton
+                            isFavorite={favorites.includes(selectedDoa.id)}
+                            onClick={() => toggleFavorite(selectedDoa.id)}
+                        />
+                    )}
                 </div>
             </div>
 
@@ -84,14 +125,53 @@ const DoaView = () => {
                             exit={{ opacity: 0 }}
                             className="p-4 space-y-2 pb-20"
                         >
+                            {/* Search & favorites filter */}
+                            <div className="flex items-center gap-2 mb-2">
+                                <div className="relative flex-1">
+                                    <FontAwesomeIcon
+                                        icon={faMagnifyingGlass}
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
+                                    />
+                                    <input
+                                        type="search"
+                                        value={query}
+                                        onChange={(e) => setQuery(e.target.value)}
+                                        placeholder="Cari doa..."
+                                        aria-label="Cari doa"
+                                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                    />
+                                </div>
+                                <button
+                                    onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                                    aria-pressed={showFavoritesOnly}
+                                    className={`shrink-0 px-3 py-2.5 rounded-xl border text-sm flex items-center gap-1.5 transition-colors ${showFavoritesOnly
+                                        ? 'bg-amber-500 border-amber-500 text-white'
+                                        : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300'
+                                        }`}
+                                >
+                                    <FontAwesomeIcon icon={faStar} />
+                                    Favorit
+                                </button>
+                            </div>
+
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                                {doaList.length} Doa dari Hisnul Muslim:
+                                {normalizedQuery || showFavoritesOnly
+                                    ? `${doaList.length} doa ditemukan`
+                                    : `${doaList.length} Doa dari Hisnul Muslim:`}
                             </p>
+
+                            {doaList.length === 0 && (
+                                <p className="text-center text-sm text-gray-500 dark:text-gray-400 py-8">
+                                    {showFavoritesOnly && favorites.length === 0
+                                        ? 'Belum ada doa favorit. Ketuk ⭐ pada doa untuk menyimpannya.'
+                                        : 'Doa tidak ditemukan.'}
+                                </p>
+                            )}
 
                             {doaList.map((doa, index) => (
                                 <motion.button
                                     key={doa.id}
-                                    onClick={() => handleSelectDoa(index)}
+                                    onClick={() => handleSelectDoa(doa)}
                                     className="w-full text-left p-3.5 rounded-xl border border-gray-200 dark:border-gray-700 
                                         bg-white dark:bg-gray-800/50
                                         hover:border-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20
@@ -112,6 +192,10 @@ const DoaView = () => {
                                             {doa.title}
                                         </span>
                                     </div>
+
+                                    {favorites.includes(doa.id) && (
+                                        <FontAwesomeIcon icon={faStar} className="text-amber-500 text-sm" aria-label="Favorit" />
+                                    )}
 
                                     {/* Arrow */}
                                     <FontAwesomeIcon
@@ -176,6 +260,10 @@ const DoaView = () => {
                                         📚 {selectedDoa.source}
                                     </p>
                                 </div>
+
+                                <div className="flex justify-center mt-4">
+                                    <ShareButton title={selectedDoa.title} text={formatEntry(selectedDoa)} />
+                                </div>
                             </div>
                         </motion.div>
                     )}
@@ -184,5 +272,18 @@ const DoaView = () => {
         </div>
     );
 };
+
+const FavoriteButton = ({ isFavorite, onClick }) => (
+    <Button
+        variant="ghost"
+        size="icon"
+        onClick={onClick}
+        className="h-9 w-9 rounded-full shrink-0"
+        aria-label={isFavorite ? 'Hapus dari favorit' : 'Tambah ke favorit'}
+        aria-pressed={isFavorite}
+    >
+        <FontAwesomeIcon icon={faStar} className={isFavorite ? 'text-amber-500' : 'text-gray-300 dark:text-gray-600'} />
+    </Button>
+);
 
 export default DoaView;

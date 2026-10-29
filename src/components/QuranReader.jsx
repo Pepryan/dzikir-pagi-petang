@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookOpen, faFileAlt, faScroll } from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt, faScroll } from "@fortawesome/free-solid-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDzikir } from "@/context/DzikirContext";
 import QuranScrollView from "./QuranScrollView";
 import QuranPageView from "./QuranPageView";
+import { shareText } from "@/lib/share";
 
 /**
  * Main Quran Reader component
@@ -79,24 +80,22 @@ const QuranReader = ({ surah }) => {
         }
     }, [currentAyatIndex]);
 
-    // Copy ayat to clipboard
-    const handleCopy = async (e, ayat = currentAyat) => {
+    // Share ayat via native share sheet, or copy to clipboard where unsupported
+    const handleShare = async (e, ayat = currentAyat) => {
         e?.stopPropagation();
         if (!ayat) return;
         const text = `${ayat.arabic}\n\n${ayat.latin}\n\n"${ayat.translation}"\n\n— ${surah.name} : ${ayat.number}`;
-        try {
-            await navigator.clipboard.writeText(text);
-            showToast('📋 Ayat disalin!');
-        } catch {
-            showToast('❌ Gagal menyalin');
-        }
+        const result = await shareText({ title: `${surah.name} : ${ayat.number}`, text });
+        if (result === 'copied') showToast('📋 Ayat disalin!');
+        else if (result === 'failed') showToast('❌ Gagal menyalin');
     };
 
     // Jump to specific ayat
     const handleJump = () => {
-        const ayatNum = parseInt(jumpValue);
-        if (ayatNum >= 1 && ayatNum <= totalAyat) {
-            setCurrentAyatIndex(ayatNum - 1);
+        // Match by ayat number: selected-ayat surahs (e.g. Al-Kahfi 1-10, 101-110) aren't contiguous
+        const index = ayatList.findIndex(ayat => ayat.number === parseInt(jumpValue));
+        if (index !== -1) {
+            setCurrentAyatIndex(index);
             setShowJumpInput(false);
             setJumpValue('');
         }
@@ -220,7 +219,7 @@ const QuranReader = ({ surah }) => {
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-gray-800 dark:bg-gray-700 text-white px-5 py-2.5 rounded-full shadow-lg text-sm whitespace-nowrap max-w-[90vw]"
+                        className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-gray-800 dark:bg-gray-700 text-white px-5 py-2.5 rounded-full shadow-lg text-sm whitespace-nowrap max-w-[90vw]"
                     >
                         {toast}
                     </motion.div>
@@ -242,6 +241,7 @@ const QuranReader = ({ surah }) => {
                 scrollProgress={scrollProgress}
                 totalAyat={totalAyat}
                 currentAyat={currentAyat}
+                currentAyatIndex={currentAyatIndex}
                 showJumpInput={showJumpInput}
                 setShowJumpInput={setShowJumpInput}
             />
@@ -254,7 +254,8 @@ const QuranReader = ({ surah }) => {
                         setJumpValue={setJumpValue}
                         handleJump={handleJump}
                         setShowJumpInput={setShowJumpInput}
-                        totalAyat={totalAyat}
+                        firstAyat={ayatList[0].number}
+                        lastAyat={ayatList[totalAyat - 1].number}
                         jumpInputRef={jumpInputRef}
                     />
                 )}
@@ -269,7 +270,7 @@ const QuranReader = ({ surah }) => {
                     arabicEndRef={arabicEndRef}
                     getFontFamily={getFontFamily}
                     toArabicNumber={toArabicNumber}
-                    handleCopy={handleCopy}
+                    handleShare={handleShare}
                     settings={settings}
                 />
             ) : (
@@ -282,11 +283,13 @@ const QuranReader = ({ surah }) => {
                     showSwipeHint={showSwipeHint}
                     goToNext={goToNext}
                     goToPrev={goToPrev}
-                    handleCopy={handleCopy}
+                    setCurrentAyatIndex={setCurrentAyatIndex}
+                    handleShare={handleShare}
                     handleTouchStart={handleTouchStart}
                     handleTouchMove={handleTouchMove}
                     handleTouchEnd={handleTouchEnd}
                     getFontFamily={getFontFamily}
+                    toArabicNumber={toArabicNumber}
                     settings={settings}
                 />
             )}
@@ -295,36 +298,33 @@ const QuranReader = ({ surah }) => {
 };
 
 // Sub-components
+// The surah name is already shown in QuranView's header, so this stays compact
 const SurahHeader = ({ surah, totalAyat, viewMode, toggleViewMode, getFontFamily }) => (
-    <div className="text-center pb-4 border-b border-gray-200 dark:border-gray-700 mb-4">
-        <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center justify-center gap-2">
-            <FontAwesomeIcon icon={faBookOpen} className="text-primary-500" />
-            {surah.name}
-            <span className="text-lg font-arabic" style={{ fontFamily: getFontFamily() }}>
-                {surah.nameArabic}
-            </span>
-        </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-            {surah.meaning} • {surah.type} • {totalAyat} Ayat
-        </p>
-        {surah.totalAyat && surah.totalAyat > totalAyat && (
-            <p className="text-xs text-amber-600 dark:text-amber-400 mt-2 bg-amber-50 dark:bg-amber-900/20 px-3 py-1.5 rounded-full inline-block">
-                📖 Ayat pilihan ({totalAyat} dari {surah.totalAyat} ayat)
+    <div className="flex items-center justify-between gap-3 pb-3 border-b border-gray-200 dark:border-gray-700 mb-3">
+        <div className="min-w-0">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+                <span className="text-lg text-gray-800 dark:text-gray-200 mr-1.5" style={{ fontFamily: getFontFamily() }}>
+                    {surah.nameArabic}
+                </span>
+                {surah.meaning} • {surah.type} • {totalAyat} Ayat
             </p>
-        )}
-        <div className="mt-3 flex justify-center">
-            <button
-                onClick={toggleViewMode}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:border-green-300 dark:hover:border-green-700 hover:text-green-700 dark:hover:text-green-400 active:scale-95 transition-all duration-200 text-sm"
-            >
-                <FontAwesomeIcon icon={viewMode === 'page' ? faScroll : faFileAlt} className="text-sm" />
-                <span>{viewMode === 'page' ? 'Mode Scroll' : 'Mode Per Ayat'}</span>
-            </button>
+            {surah.totalAyat && surah.totalAyat > totalAyat && (
+                <p className="text-xs text-amber-600 dark:text-amber-400">
+                    📖 Ayat pilihan ({totalAyat} dari {surah.totalAyat} ayat)
+                </p>
+            )}
         </div>
+        <button
+            onClick={toggleViewMode}
+            className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:border-green-300 dark:hover:border-green-700 hover:text-green-700 dark:hover:text-green-400 active:scale-95 transition-all duration-200 text-xs"
+        >
+            <FontAwesomeIcon icon={viewMode === 'page' ? faScroll : faFileAlt} />
+            <span>{viewMode === 'page' ? 'Mode Scroll' : 'Mode Per Ayat'}</span>
+        </button>
     </div>
 );
 
-const ProgressSection = ({ viewMode, scrollProgress, totalAyat, currentAyat, showJumpInput, setShowJumpInput }) => (
+const ProgressSection = ({ viewMode, scrollProgress, totalAyat, currentAyat, currentAyatIndex, showJumpInput, setShowJumpInput }) => (
     viewMode === 'scroll' ? (
         <div className="flex items-center justify-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-4 px-4">
             <span className="text-xs">{totalAyat} Ayat</span>
@@ -353,7 +353,7 @@ const ProgressSection = ({ viewMode, scrollProgress, totalAyat, currentAyat, sho
                 <motion.div
                     className="h-full bg-gradient-to-r from-green-500 to-emerald-400"
                     initial={false}
-                    animate={{ width: `${((currentAyat.number) / totalAyat) * 100}%` }}
+                    animate={{ width: `${((currentAyatIndex + 1) / totalAyat) * 100}%` }}
                     transition={{ duration: 0.3 }}
                 />
             </div>
@@ -362,7 +362,7 @@ const ProgressSection = ({ viewMode, scrollProgress, totalAyat, currentAyat, sho
     )
 );
 
-const JumpInput = ({ jumpValue, setJumpValue, handleJump, setShowJumpInput, totalAyat, jumpInputRef }) => (
+const JumpInput = ({ jumpValue, setJumpValue, handleJump, setShowJumpInput, firstAyat, lastAyat, jumpInputRef }) => (
     <motion.div
         initial={{ opacity: 0, height: 0 }}
         animate={{ opacity: 1, height: 'auto' }}
@@ -373,12 +373,12 @@ const JumpInput = ({ jumpValue, setJumpValue, handleJump, setShowJumpInput, tota
             <input
                 ref={jumpInputRef}
                 type="number"
-                min="1"
-                max={totalAyat}
+                min={firstAyat}
+                max={lastAyat}
                 value={jumpValue}
                 onChange={(e) => setJumpValue(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleJump()}
-                placeholder={`1 - ${totalAyat}`}
+                placeholder={`${firstAyat} - ${lastAyat}`}
                 className="w-24 px-3 py-2 text-center rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <button onClick={handleJump} className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">

@@ -3,8 +3,11 @@ import { useDzikir } from "@/context/DzikirContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import ShareButton from "./ShareButton";
+import { formatEntry } from "@/lib/share";
 
-const DzikirCard = ({ dzikir }) => {
+// onTap: when set (counter mode), tapping the card increments the count
+const DzikirCard = ({ dzikir, onTap }) => {
   const { settings } = useDzikir();
   const { showTranslation, showLatin, showSource } = settings;
 
@@ -92,10 +95,17 @@ const DzikirCard = ({ dzikir }) => {
               {dzikir.counter}/{dzikir.count}
             </span>
           </CardTitle>
+          {onTap && !isComplete && (
+            <p className="text-xs text-gray-500 dark:text-gray-400">Ketuk kartu untuk menghitung</p>
+          )}
         </CardHeader>
 
         {/* Content area - scrollable with padding for floating button */}
-        <div className="flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <div
+          className={`flex-1 overflow-y-auto overscroll-contain ${onTap ? 'cursor-pointer select-none' : ''}`}
+          style={{ WebkitOverflowScrolling: 'touch' }}
+          onClick={onTap}
+        >
           <CardContent className="space-y-4">
             {/* Arabic text with improved styling */}
             <motion.div
@@ -164,6 +174,10 @@ const DzikirCard = ({ dzikir }) => {
                 <p>{dzikir.source}</p>
               </motion.div>
             )}
+            <div className="flex justify-center">
+              <ShareButton title={dzikir.title} text={formatEntry(dzikir)} />
+            </div>
+
             {/* Spacer for floating button */}
             <div className="h-24"></div>
           </CardContent>

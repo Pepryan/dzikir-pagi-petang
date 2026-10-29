@@ -1,9 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faCheck, faHandPointLeft, faHandPointRight,
-    faChevronLeft, faChevronRight, faCopy
+    faChevronLeft, faChevronRight, faCopy, faShareNodes
 } from "@fortawesome/free-solid-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
+import { canShare } from "@/lib/share";
 
 /**
  * Page View component for Quran Reader
@@ -18,11 +19,13 @@ const QuranPageView = ({
     showSwipeHint,
     goToNext,
     goToPrev,
-    handleCopy,
+    setCurrentAyatIndex,
+    handleShare,
     handleTouchStart,
     handleTouchMove,
     handleTouchEnd,
     getFontFamily,
+    toArabicNumber,
     settings
 }) => {
     return (
@@ -86,7 +89,7 @@ const QuranPageView = ({
                         >
                             {currentAyat.arabic}
                             <span className="inline-block mx-2 text-primary-500 text-xl">
-                                ﴿{currentAyat.number}﴾
+                                ﴿{toArabicNumber(currentAyat.number)}﴾
                             </span>
                         </p>
 
@@ -113,16 +116,16 @@ const QuranPageView = ({
                 </AnimatePresence>
             </div>
 
-            {/* Copy Button */}
+            {/* Share (or copy, where sharing isn't supported) */}
             <div className="flex justify-center py-2">
                 <button
-                    onClick={handleCopy}
+                    onClick={handleShare}
                     onTouchStart={(e) => e.stopPropagation()}
                     onTouchEnd={(e) => e.stopPropagation()}
                     className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-full transition-all"
                 >
-                    <FontAwesomeIcon icon={faCopy} className="mr-2" />
-                    Salin Ayat
+                    <FontAwesomeIcon icon={canShare() ? faShareNodes : faCopy} className="mr-2" />
+                    {canShare() ? 'Bagikan Ayat' : 'Salin Ayat'}
                 </button>
             </div>
 
@@ -132,7 +135,7 @@ const QuranPageView = ({
                 surahName={surah.name}
                 currentAyatIndex={currentAyatIndex}
                 totalAyat={totalAyat}
-                setCurrentAyatIndex={() => { }}
+                setCurrentAyatIndex={setCurrentAyatIndex}
             />
         </>
     );

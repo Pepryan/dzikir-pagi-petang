@@ -42,25 +42,30 @@ QS. Ar-Ra'd ayat 28
   - **Mode Per Ayat**: Navigasi dengan swipe (mobile) atau arrow keys (desktop)
   - Fitur jump-to-ayat untuk langsung ke ayat tertentu
   - Bookmark otomatis - melanjutkan dari posisi terakhir
-  - Salin ayat ke clipboard
+  - Salin dan bagikan ayat (Web Share API, fallback ke clipboard)
   - Progress bar dengan indikator persentase
 
 - 🔄 **Fitur Pelacakan**: 
   - Progress bar visual untuk memantau kemajuan
   - Indikator navigasi yang intuitif
   - Penyimpanan progres otomatis
-  - Mode penghitung (marker & counter)
-  - Statistik dan streak harian
+  - Mode penghitung (marker & counter) - di mode counter cukup ketuk kartu untuk menghitung
+  - Progress otomatis reset setiap hari baru
+  - Tab Pagi/Petang otomatis sesuai jam (bisa dimatikan di pengaturan)
+  - Statistik, streak harian, dan kalender riwayat bulanan
 
 - 🤲 **Koleksi Doa**:
   - Doa-doa harian pilihan
   - Tampilan Arabic, Latin, dan terjemahan
+  - Pencarian doa dan daftar doa favorit
+  - Bagikan dzikir dan doa
 
 - 💾 **Penyimpanan Data**: 
   - Menyimpan kemajuan dzikir secara otomatis
   - Pengaturan preferensi pengguna yang persisten
   - Data tersimpan di penyimpanan lokal browser
   - Dukungan offline dengan Service Worker
+  - Ekspor/impor data (statistik, pengaturan, progress Al-Quran, doa favorit) ke file JSON
 
 ## 🛠️ Teknologi
 
@@ -150,8 +155,7 @@ dzikir-pagi-petang/
 │   ├── test/            # Test setup
 │   └── index.css        # Global styles & Tailwind config
 ├── index.html           # Entry HTML
-├── vite.config.js       # Vite & Vitest configuration
-└── tailwind.config.js   # Tailwind configuration
+└── vite.config.js       # Vite & Vitest configuration
 ```
 
 ## 🧪 Testing
@@ -168,7 +172,10 @@ npm run test:run
 
 Test coverage mencakup:
 - QuranReader component (navigation, completion state, jump-to-ayat, copy feature)
-- DzikirContext (bookmark/last read functionality)
+- DzikirContext (reset harian, restore posisi, tab otomatis sesuai jam, shortcut PWA)
+- Statistik (tanggal lokal, streak, kalender bulanan)
+- DzikirCard (ketuk untuk menghitung), DoaView (pencarian & favorit)
+- Bagikan dan ekspor/impor data
 
 ## 🤝 Kontribusi
 
